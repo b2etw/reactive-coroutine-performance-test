@@ -1,0 +1,14 @@
+# Extend vert.x image
+FROM openjdk:11-jre-slim
+
+#                                                       (1)
+ENV VERTICLE_NAME com.example.demo.vertx.CoroutineVertxVerticleKt
+ENV VERTICLE_FILE build/libs/demo-vertx-1.0.0-SNAPSHOT-fat.jar
+
+# Copy your verticle to the container                   (2)
+COPY $VERTICLE_FILE /opt
+
+# Launch the verticle
+WORKDIR /opt
+ENTRYPOINT ["sh", "-c"]
+CMD ["java -cp /opt/* $VERTICLE_NAME"]
