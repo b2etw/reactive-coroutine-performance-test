@@ -1,10 +1,10 @@
-package com.example.demo.spring
+package com.example.demo.spring.flux
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class DemoSpringApplicationTests {
+class DemoSpringFluxApplicationTests {
 
     @Test
     fun contextLoads() {

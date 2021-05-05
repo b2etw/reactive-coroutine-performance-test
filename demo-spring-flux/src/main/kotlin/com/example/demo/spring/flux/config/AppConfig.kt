@@ -1,4 +1,4 @@
-package com.example.demo.spring.config
+package com.example.demo.spring.flux.config
 
 import io.netty.channel.nio.NioEventLoopGroup
 import org.springframework.context.annotation.Bean
@@ -12,7 +12,6 @@ import reactor.netty.resources.LoopResources
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
-
 
 @Configuration
 class AppConfig {

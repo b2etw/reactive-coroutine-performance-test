@@ -1,6 +1,6 @@
-package com.example.demo.spring.web.controller
+package com.example.demo.spring.flux.web.controller
 
-import com.example.demo.spring.service.TestService
+import com.example.demo.spring.flux.service.TestService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -10,12 +10,6 @@ import org.springframework.web.bind.annotation.RestController
 class TestController(
     val testService: TestService
 ) {
-
-    @GetMapping("/mvc")
-    fun mvc() = testService.mvc()
-
-    @GetMapping("/async")
-    fun async() = testService.async()
 
     @GetMapping("/flux")
     fun flux() = testService.flux()

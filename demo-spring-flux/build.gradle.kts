@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.example"
-version = "0.0.3-mvc"
+version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -17,7 +17,6 @@ repositories {
 }
 
 dependencies {
-//    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
@@ -48,7 +47,7 @@ jib {
     }
     container {
         creationTime = "USE_CURRENT_TIMESTAMP"
-        mainClass = "com.example.demo.spring.DemoSpringApplicationKt"
+        mainClass = "com.example.demo.spring.DemoSpringFluxApplicationKt"
         jvmFlags = listOf(
             "-Xms2g",
             "-Xmx2g",

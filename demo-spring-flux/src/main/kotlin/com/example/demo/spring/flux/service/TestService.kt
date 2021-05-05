@@ -1,4 +1,4 @@
-package com.example.demo.spring.service
+package com.example.demo.spring.flux.service
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
@@ -13,10 +13,6 @@ class TestService(
 
     @Value("\${delay.service.domain}")
     val domain: String = ""
-
-    fun mvc() = getResponse().bodyToMono(String::class.java).block()
-
-    fun async() = getResponse().bodyToMono(String::class.java).toFuture()
 
     fun flux() = getResponse().bodyToMono(String::class.java)
 

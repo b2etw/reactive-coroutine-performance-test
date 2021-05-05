@@ -1,11 +1,11 @@
-package com.example.demo.spring
+package com.example.demo.spring.flux
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class DemoSpringApplication
+class DemoSpringFluxApplication
 
 fun main(args: Array<String>) {
-    runApplication<DemoSpringApplication>(*args)
+    runApplication<DemoSpringFluxApplication>(*args)
 }
