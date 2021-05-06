@@ -12,11 +12,20 @@ import java.util.concurrent.TimeUnit
 @RequestMapping("/mock")
 class MockController {
 
-    @GetMapping("/delay/{seconds}")
-    fun mockDelay(@PathVariable seconds: Long) =
+    @GetMapping("/delay/s/{s}")
+    fun mockDelaySeconds(@PathVariable s: Long) =
         run {
             val start = LocalDateTime.now()
-            TimeUnit.SECONDS.sleep(seconds)
+            TimeUnit.SECONDS.sleep(s)
+            val end = LocalDateTime.now()
+            ResponseEntity.ok("$start / $end")
+        }
+
+    @GetMapping("/delay/ms/{ms}")
+    fun mockDelayMilliSeconds(@PathVariable ms: Long) =
+        run {
+            val start = LocalDateTime.now()
+            TimeUnit.MILLISECONDS.sleep(ms)
             val end = LocalDateTime.now()
             ResponseEntity.ok("$start / $end")
         }
