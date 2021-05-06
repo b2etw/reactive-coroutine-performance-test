@@ -47,13 +47,13 @@ jib {
     }
     container {
         creationTime = "USE_CURRENT_TIMESTAMP"
-        mainClass = "com.example.demo.spring.DemoSpringFluxApplicationKt"
+        mainClass = "com.example.demo.spring.flux.DemoSpringFluxApplicationKt"
         jvmFlags = listOf(
             "-Xms2g",
             "-Xmx2g",
             "-Dreactor.netty.ioWorkerCount=1000",
             "-Dreactor.netty.pool.maxConnections=8192",
-            "-Ddelay.service.domain=192.168.1.208"
+            "-Ddelay.service.domain=192.168.1.140"
         )
     }
     setAllowInsecureRegistries(true)

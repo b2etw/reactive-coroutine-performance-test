@@ -14,7 +14,7 @@ class TestVerticle : AbstractVerticle() {
   override fun start(startPromise: Promise<Void>?) {
     vertx.eventBus().consumer<String>("test") {
       WebClient.create(vertx)
-        .get(8888, "192.168.1.208", "/mock/delay/1")
+        .get(8888, "192.168.1.140", "/mock/delay/1")
         .putHeader("Accept", "application/json")
         .send()
         .onComplete { res ->

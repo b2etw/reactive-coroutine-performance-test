@@ -44,7 +44,7 @@ jib {
     }
     container {
         creationTime = "USE_CURRENT_TIMESTAMP"
-        mainClass = "com.example.demo.spring.DemoMockApplicationKt"
+        mainClass = "com.example.demo.mock.DemoMockApplicationKt"
         jvmFlags = listOf(
             "-Xms2g",
             "-Xmx2g"

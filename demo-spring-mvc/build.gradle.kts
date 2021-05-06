@@ -45,11 +45,11 @@ jib {
     }
     container {
         creationTime = "USE_CURRENT_TIMESTAMP"
-        mainClass = "com.example.demo.spring.DemoSpringMvcApplicationKt"
+        mainClass = "com.example.demo.spring.mvc.DemoSpringMvcApplicationKt"
         jvmFlags = listOf(
             "-Xms2g",
             "-Xmx2g",
-            "-Ddelay.service.domain=192.168.1.208"
+            "-Ddelay.service.domain=192.168.1.140"
         )
     }
     setAllowInsecureRegistries(true)
