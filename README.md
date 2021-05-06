@@ -17,7 +17,7 @@
   * CPU (light or intensive)
   * IO (light or intensive)
     * Memory
-    * Network
+    * Network ([case1](./doc/case1/case1.md))
     * Disk
 
 # Principle
