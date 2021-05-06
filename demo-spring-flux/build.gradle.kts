@@ -49,8 +49,8 @@ jib {
         creationTime = "USE_CURRENT_TIMESTAMP"
         mainClass = "com.example.demo.spring.flux.DemoSpringFluxApplicationKt"
         jvmFlags = listOf(
-            "-Xms2g",
-            "-Xmx2g",
+            "-Xms8g",
+            "-Xmx8g",
             "-Dreactor.netty.ioWorkerCount=1000",
             "-Dreactor.netty.pool.maxConnections=8192",
             "-Ddelay.service.domain=192.168.1.140"
