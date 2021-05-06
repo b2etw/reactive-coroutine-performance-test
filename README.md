@@ -1,5 +1,5 @@
 # Reactive X Coroutine X Performance Test
-* We use Kotlin with six popular Java HTTP Server Side Applications to compare its performance on specific cases. 
+* We use Kotlin with popular HTTP Server Side Applications to compare its performance on specific cases. 
 * Comparing its performance on CPU, Network IO or Disk intensive cases.
 
 # Target
