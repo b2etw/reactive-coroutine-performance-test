@@ -3,12 +3,18 @@
 * the target server will invoke delay endpoint and return
 
 # Environment, ecs.g6.xlarge(4core, 16g)
-* delay service deploy on aliyun ecs.g6.xlarge machine
-* target server deploy on aliyun ecs.g6.xlarge machine
+* all services deploy on aliyun ecs.g6.xlarge machine
 
-# Variable
+# Context
 * target server receive request and invoke /mock/delay/1 endpoint then return
 * jmeter use constant throughput timer to keep 15 RPS
+* for demo-mock
+  * server.tomcat.threads.max=800 
+* for demo-spring-mvc
+  * server.tomcat.threads.max=800
+* for demo-spring-flux
+  * -Dreactor.netty.ioWorkerCount=1000
+  * -Dreactor.netty.pool.maxConnections=8192
 
 # Procedure
 * Warm twice and hit three times
