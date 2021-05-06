@@ -19,7 +19,9 @@ class TestService(
             val delay500req = getResponse(500).bodyToMono(String::class.java)
             val delay300req = getResponse(300).bodyToMono(String::class.java)
             val delay200req = getResponse(200).bodyToMono(String::class.java)
-            Mono.zip(delay500req, delay300req, delay200req).map { v -> "${v.t1} / ${v.t2} / ${v.t3}" }.block()
+            Mono.zip(delay500req, delay300req, delay200req)
+                .map { v -> "${v.t1} / ${v.t2} / ${v.t3}" }
+                .block()
         }
 
     fun async() =
@@ -34,7 +36,9 @@ class TestService(
             val delay500req = getResponse(500).bodyToMono(String::class.java)
             val delay300req = getResponse(300).bodyToMono(String::class.java)
             val delay200req = getResponse(200).bodyToMono(String::class.java)
-            Mono.zip(delay500req, delay300req, delay200req).map { v -> "${v.t1} / ${v.t2} / ${v.t3}" }.toFuture()
+            Mono.zip(delay500req, delay300req, delay200req)
+                .map { v -> "${v.t1} / ${v.t2} / ${v.t3}" }
+                .toFuture()
         }
 
     private fun getResponse(ms: Long) = webClient.get()
