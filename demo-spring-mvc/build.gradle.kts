@@ -47,8 +47,8 @@ jib {
         creationTime = "USE_CURRENT_TIMESTAMP"
         mainClass = "com.example.demo.spring.mvc.DemoSpringMvcApplicationKt"
         jvmFlags = listOf(
-            "-Xms2g",
-            "-Xmx2g",
+            "-Xms8g",
+            "-Xmx8g",
             "-Ddelay.service.domain=192.168.1.140"
         )
     }
