@@ -1,7 +1,8 @@
 # Reactive X Coroutine X Performance Test
 ```
-> We use Kotlin with six popular Java HTTP Server Side Applications to compare its performance on specific cases. 
-> These applications contains Spring MVC, Spring MVC Async, Spring WebFlux, Spring WebFlux Coroutine, Vert.x and Vert.x Coroutine. We will compare its performance on CPU, Network IO or Disk intensive case.
+We use Kotlin with six popular Java HTTP Server Side Applications to compare its performance on specific cases. 
+These applications contains Spring MVC, Spring MVC Async, Spring WebFlux, Spring WebFlux Coroutine, Vert.x and Vert.x Coroutine. 
+We will compare its performance on CPU, Network IO or Disk intensive case.
 ```
 
 # Target
