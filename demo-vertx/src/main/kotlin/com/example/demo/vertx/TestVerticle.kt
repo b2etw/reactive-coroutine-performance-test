@@ -14,17 +14,19 @@ class TestVerticle : AbstractVerticle() {
   private val log = LoggerFactory.getLogger(this::class.java)
 
   override fun start(startPromise: Promise<Void>?) {
+    val delayServiceDomain = System.getenv().getOrDefault("DELAY_SERVICE_DOMAIN", "localhost")
+
     vertx.eventBus().consumer<String>("test") {
       val delay500req = WebClient.create(vertx)
-        .get(8888, "localhost", "/mock/delay/ms/500")
+        .get(8888, delayServiceDomain, "/delay/ms/1000")
         .putHeader("Accept", "application/json")
         .send()
       val delay300req = WebClient.create(vertx)
-        .get(8888, "localhost", "/mock/delay/ms/500")
+        .get(8888, delayServiceDomain, "/delay/ms/800")
         .putHeader("Accept", "application/json")
         .send()
       val delay200req = WebClient.create(vertx)
-        .get(8888, "localhost", "/mock/delay/ms/500")
+        .get(8888, delayServiceDomain, "/delay/ms/500")
         .putHeader("Accept", "application/json")
         .send()
       CompositeFuture.all(delay500req, delay300req, delay200req).onComplete { res ->
