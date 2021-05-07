@@ -3,11 +3,15 @@ package com.example.demo.vertx
 import io.vertx.core.DeploymentOptions
 import io.vertx.core.Promise
 import io.vertx.core.Vertx
+import io.vertx.core.VertxOptions
 import io.vertx.ext.web.Route
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import io.vertx.kotlin.coroutines.CoroutineVerticle
 import io.vertx.kotlin.coroutines.dispatcher
+import io.vertx.micrometer.MicrometerMetricsOptions
+import io.vertx.micrometer.PrometheusScrapingHandler
+import io.vertx.micrometer.VertxPrometheusOptions
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
@@ -30,6 +34,8 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
         }
       }
     }
+
+    router.route("/metrics").handler(PrometheusScrapingHandler.create())
 
     httpServer
       .requestHandler(router)
@@ -54,5 +60,15 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
 }
 
 fun main() {
-  Vertx.vertx().deployVerticle(CoroutineVertxVerticle())
+  val vertx = Vertx.vertx(
+    VertxOptions().setMetricsOptions(
+      MicrometerMetricsOptions()
+        .setPrometheusOptions(
+          VertxPrometheusOptions().setEnabled(true)
+        ).setEnabled(true)
+        .setJvmMetricsEnabled(true)
+    )
+  )
+
+  vertx.deployVerticle(CoroutineVertxVerticle())
 }

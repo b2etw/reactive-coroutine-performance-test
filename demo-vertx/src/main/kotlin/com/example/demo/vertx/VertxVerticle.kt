@@ -4,7 +4,11 @@ import io.vertx.core.AbstractVerticle
 import io.vertx.core.DeploymentOptions
 import io.vertx.core.Promise
 import io.vertx.core.Vertx
+import io.vertx.core.VertxOptions
 import io.vertx.ext.web.Router
+import io.vertx.micrometer.MicrometerMetricsOptions
+import io.vertx.micrometer.PrometheusScrapingHandler
+import io.vertx.micrometer.VertxPrometheusOptions
 import org.slf4j.LoggerFactory
 
 
@@ -28,6 +32,8 @@ class VertxVerticle : AbstractVerticle() {
       }
     }
 
+    router.route("/metrics").handler(PrometheusScrapingHandler.create())
+
     httpServer
       .requestHandler(router)
       .listen(8088) {
@@ -39,5 +45,15 @@ class VertxVerticle : AbstractVerticle() {
 }
 
 fun main() {
-  Vertx.vertx().deployVerticle(VertxVerticle())
+  val vertx = Vertx.vertx(
+    VertxOptions().setMetricsOptions(
+      MicrometerMetricsOptions()
+        .setPrometheusOptions(
+          VertxPrometheusOptions().setEnabled(true)
+        ).setEnabled(true)
+        .setJvmMetricsEnabled(true)
+    )
+  )
+
+  vertx.deployVerticle(VertxVerticle())
 }

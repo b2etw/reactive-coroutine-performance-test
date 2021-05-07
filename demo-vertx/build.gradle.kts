@@ -35,6 +35,8 @@ dependencies {
   implementation("io.vertx:vertx-lang-kotlin")
   implementation("io.vertx:vertx-lang-kotlin-coroutines")
   implementation("ch.qos.logback:logback-classic:1.2.3")
+  implementation("io.vertx:vertx-micrometer-metrics:4.0.3")
+  implementation("io.micrometer:micrometer-registry-prometheus:1.6.5")
   implementation(kotlin("stdlib-jdk8"))
   testImplementation("io.vertx:vertx-junit5")
   testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
