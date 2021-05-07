@@ -17,19 +17,10 @@ class TestVerticle : AbstractVerticle() {
     val delayServiceDomain = System.getenv().getOrDefault("DELAY_SERVICE_DOMAIN", "localhost")
 
     vertx.eventBus().consumer<String>("test") {
-      val delay500req = WebClient.create(vertx)
-        .get(8888, delayServiceDomain, "/delay/ms/1000")
-        .putHeader("Accept", "application/json")
-        .send()
-      val delay300req = WebClient.create(vertx)
-        .get(8888, delayServiceDomain, "/delay/ms/800")
-        .putHeader("Accept", "application/json")
-        .send()
-      val delay200req = WebClient.create(vertx)
-        .get(8888, delayServiceDomain, "/delay/ms/500")
-        .putHeader("Accept", "application/json")
-        .send()
-      CompositeFuture.all(delay500req, delay300req, delay200req).onComplete { res ->
+      val delay1000req = getResponse(delayServiceDomain, 1000)
+      val delay800req = getResponse(delayServiceDomain, 800)
+      val delay500req = getResponse(delayServiceDomain, 500)
+      CompositeFuture.all(delay1000req, delay800req, delay500req).onComplete { res ->
         if (res.succeeded()) {
           val resultAt0 = res.result().resultAt<HttpResponse<Buffer>>(0)
           val resultAt1 = res.result().resultAt<HttpResponse<Buffer>>(1)
@@ -41,4 +32,12 @@ class TestVerticle : AbstractVerticle() {
       }
     }
   }
+
+  private fun getResponse(delayServiceDomain: String, ms: Long) =
+    run {
+      WebClient.create(vertx)
+        .get(8888, delayServiceDomain, "/delay/ms/$ms")
+        .putHeader("Accept", "application/json")
+        .send()
+    }
 }

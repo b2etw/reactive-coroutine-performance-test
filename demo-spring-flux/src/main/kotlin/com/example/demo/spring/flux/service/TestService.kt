@@ -2,7 +2,6 @@ package com.example.demo.spring.flux.service
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
@@ -21,23 +20,23 @@ class TestService(
 
     fun flux() =
         run {
+            val delay1000req = getResponse(1000).bodyToMono(String::class.java)
+            val delay800req = getResponse(800).bodyToMono(String::class.java)
             val delay500req = getResponse(500).bodyToMono(String::class.java)
-            val delay300req = getResponse(300).bodyToMono(String::class.java)
-            val delay200req = getResponse(200).bodyToMono(String::class.java)
-            Mono.zip(delay500req, delay300req, delay200req)
+            Mono.zip(delay1000req, delay800req, delay500req)
                 .map { v -> "${v.t1} / ${v.t2} / ${v.t3}" }
         }
 
     suspend fun coroutine() =
         coroutineScope {
+            val delay1000req = async(Dispatchers.IO) { getResponse(1000).awaitBody<String>() }
+            val delay800req = async(Dispatchers.IO) { getResponse(800).awaitBody<String>() }
             val delay500req = async(Dispatchers.IO) { getResponse(500).awaitBody<String>() }
-            val delay300req = async(Dispatchers.IO) { getResponse(300).awaitBody<String>() }
-            val delay200req = async(Dispatchers.IO) { getResponse(200).awaitBody<String>() }
-            "${delay500req.await()} / ${delay300req.await()} / ${delay200req.await()}"
+            "${delay1000req.await()} / ${delay800req.await()} / ${delay500req.await()}"
         }
 
     private fun getResponse(ms: Long) = webClient.get()
-        .uri("http://$domain:8888/mock/delay/ms/$ms")
+        .uri("http://$domain:8888/delay/ms/$ms")
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
 }

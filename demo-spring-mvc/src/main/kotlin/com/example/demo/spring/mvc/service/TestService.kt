@@ -16,10 +16,10 @@ class TestService(
 
     fun mvc() =
         run {
+            val delay1000req = getResponse(1000).bodyToMono(String::class.java)
+            val delay800req = getResponse(800).bodyToMono(String::class.java)
             val delay500req = getResponse(500).bodyToMono(String::class.java)
-            val delay300req = getResponse(300).bodyToMono(String::class.java)
-            val delay200req = getResponse(200).bodyToMono(String::class.java)
-            Mono.zip(delay500req, delay300req, delay200req)
+            Mono.zip(delay1000req, delay800req, delay500req)
                 .map { v -> "${v.t1} / ${v.t2} / ${v.t3}" }
                 .block()
         }
@@ -27,22 +27,22 @@ class TestService(
     fun async() =
         run {
             // CompletableFuture Style
+//            val delay1000req = getResponse(1000).bodyToMono(String::class.java).toFuture()
+//            val delay800req = getResponse(800).bodyToMono(String::class.java).toFuture()
 //            val delay500req = getResponse(500).bodyToMono(String::class.java).toFuture()
-//            val delay300req = getResponse(300).bodyToMono(String::class.java).toFuture()
-//            val delay200req = getResponse(200).bodyToMono(String::class.java).toFuture()
-//            CompletableFuture.allOf(delay500req, delay300req, delay200req).thenApply {
-//                "${delay500req.join()} / ${delay300req.join()} / ${delay200req.join()}"
+//            CompletableFuture.allOf(delay1000req, delay800req, delay500req).thenApply {
+//                "${delay1000req.join()} / ${delay800req.join()} / ${delay500req.join()}"
 //            }
+            val delay1000req = getResponse(1000).bodyToMono(String::class.java)
+            val delay800req = getResponse(800).bodyToMono(String::class.java)
             val delay500req = getResponse(500).bodyToMono(String::class.java)
-            val delay300req = getResponse(300).bodyToMono(String::class.java)
-            val delay200req = getResponse(200).bodyToMono(String::class.java)
-            Mono.zip(delay500req, delay300req, delay200req)
+            Mono.zip(delay1000req, delay800req, delay500req)
                 .map { v -> "${v.t1} / ${v.t2} / ${v.t3}" }
                 .toFuture()
         }
 
     private fun getResponse(ms: Long) = webClient.get()
-        .uri("http://$domain:8888/mock/delay/ms/$ms")
+        .uri("http://$domain:8888/delay/ms/$ms")
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
 }
