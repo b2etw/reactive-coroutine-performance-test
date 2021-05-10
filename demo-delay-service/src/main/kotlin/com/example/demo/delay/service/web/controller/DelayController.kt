@@ -19,6 +19,6 @@ class DelayController {
             sw.start()
             TimeUnit.MILLISECONDS.sleep(ms)
             sw.stop()
-            ResponseEntity.ok(sw.totalTimeMillis)
+            ResponseEntity.ok(mapOf("totalTimeMillis" to sw.totalTimeMillis))
         }
 }
