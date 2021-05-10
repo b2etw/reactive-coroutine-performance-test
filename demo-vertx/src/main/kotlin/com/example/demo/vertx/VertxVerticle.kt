@@ -5,6 +5,7 @@ import io.vertx.core.DeploymentOptions
 import io.vertx.core.Promise
 import io.vertx.core.Vertx
 import io.vertx.core.VertxOptions
+import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.Router
 import io.vertx.micrometer.MicrometerMetricsOptions
 import io.vertx.micrometer.PrometheusScrapingHandler
@@ -21,10 +22,10 @@ class VertxVerticle : AbstractVerticle() {
     val router = Router.router(vertx)
 
     router.get("/test/vertx").handler { ctx ->
-      vertx.eventBus().request<String>("test", "").onComplete { reply ->
+      vertx.eventBus().request<JsonObject>("test", JsonObject().put("", "")).onComplete { reply ->
         if (reply.succeeded()) {
-          ctx.response().putHeader("Content-type", "application/json")
-          ctx.response().end(reply.result().body())
+          ctx.response().putHeader("Content-Type", "application/json")
+          ctx.response().end(reply.result().body().encode())
         } else {
           log.error(reply.cause().message, reply.cause())
           ctx.response().setStatusCode(500).end(reply.cause().message)
@@ -36,8 +37,8 @@ class VertxVerticle : AbstractVerticle() {
 
     httpServer
       .requestHandler(router)
-      .listen(8088) {
-        log.info("HTTP server started on port 8088 succeeded: ${it.succeeded()}")
+      .listen(8080) {
+        log.info("HTTP server started on port 8080 succeeded: ${it.succeeded()}")
       }
 
     vertx.deployVerticle(TestVerticle(), DeploymentOptions().setWorker(true).setWorkerPoolSize(1000))
