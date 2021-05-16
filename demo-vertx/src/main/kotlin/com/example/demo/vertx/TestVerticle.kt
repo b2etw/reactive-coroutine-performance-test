@@ -43,7 +43,6 @@ class TestVerticle : AbstractVerticle() {
     run {
       WebClient.create(vertx)
         .get(8888, delayServiceDomain, "/delay/ms/$ms")
-        .putHeader("Content-Type", "application/json")
         .send()
     }
 }

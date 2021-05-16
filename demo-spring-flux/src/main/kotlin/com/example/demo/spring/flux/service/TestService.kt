@@ -48,6 +48,5 @@ class TestService(
 
     private fun getResponse(ms: Long) = webClient.get()
         .uri("http://$domain:8888/delay/ms/$ms")
-        .accept(MediaType.APPLICATION_JSON)
         .retrieve()
 }
