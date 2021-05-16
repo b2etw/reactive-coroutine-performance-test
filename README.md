@@ -9,6 +9,7 @@
 * Spring WebFlux Coroutine
 * Vert.x
 * Vert.x Coroutine
+* Ktor
 
 # Cases
 * Variable
@@ -23,3 +24,8 @@
   * use proper RPS instead as high as possible
 * Wrong coding way
   * use blocking way to compare with non-blocking coding type
+
+# Future Targets
+* Micronaut
+* MicroProfile
+* Quasar
