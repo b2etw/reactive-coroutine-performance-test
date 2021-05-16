@@ -26,6 +26,6 @@
   * use blocking way to compare with non-blocking coding type
 
 # Future Targets
-* Micronaut
-* MicroProfile
-* Quasar
+* [Micronaut](https://micronaut.io/)
+* [MicroProfile](https://microprofile.io/)
+* [Quarkus](https://quarkus.io/)
