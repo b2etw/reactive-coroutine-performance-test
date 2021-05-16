@@ -25,6 +25,10 @@
 * Wrong coding way
   * use blocking way to compare with non-blocking coding type
 
+# Deployment
+# Testing
+# Metrics
+
 # ☄️ Future Targets
 * [Micronaut](https://micronaut.io/)
 * [MicroProfile](https://microprofile.io/)
