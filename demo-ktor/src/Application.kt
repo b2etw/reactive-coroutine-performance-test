@@ -53,11 +53,24 @@ fun Application.module(testing: Boolean = false) {
                 async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/800") }
             val delay500req =
                 async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/500") }
+
+            val ms = delay1000req.await().totalTimeMillis + delay800req.await().totalTimeMillis + delay500req.await().totalTimeMillis - 1200
+            val delay100req =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$ms") }
+
+            val delay200req =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${delay1000req.await().totalTimeMillis + 100}") }
+            val delay300req =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${delay100req.await().totalTimeMillis + 200}") }
+
             call.respond(
                 mapOf(
                     "delay1000req" to delay1000req.await().totalTimeMillis,
                     "delay800req" to delay800req.await().totalTimeMillis,
-                    "delay500req" to delay500req.await().totalTimeMillis
+                    "delay500req" to delay500req.await().totalTimeMillis,
+                    "delay100req" to delay100req.await().totalTimeMillis,
+                    "delay200req" to delay200req.await().totalTimeMillis,
+                    "delay300req" to delay300req.await().totalTimeMillis
                 )
             )
         }
