@@ -47,36 +47,26 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         get("/test/ktor") {
-            val delay1000req =
-                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/1000") }
-            val delay800req =
-                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/800") }
-            val delay500req =
-                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/500") }
+            val delay40req = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/40") }
+            val delay60req = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/60") }
 
-            val ms = delay1000req.await().totalTimeMillis + delay800req.await().totalTimeMillis + delay500req.await().totalTimeMillis - 1200
-            val delay100req =
-                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$ms") }
+            val ms = delay40req.await().totalTimeMillis + delay60req.await().totalTimeMillis
+            val delay100req = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$ms") }
 
-            val delay200req =
-                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${delay1000req.await().totalTimeMillis + 100}") }
-            val delay300req =
-                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${delay100req.await().totalTimeMillis + 200}") }
+            val delay350req = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/350") }
+            val delay450req = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/250") }
 
             call.respond(
                 mapOf(
-                    "delay1000req" to delay1000req.await().totalTimeMillis,
-                    "delay800req" to delay800req.await().totalTimeMillis,
-                    "delay500req" to delay500req.await().totalTimeMillis,
-                    "delay100req" to delay100req.await().totalTimeMillis,
-                    "delay200req" to delay200req.await().totalTimeMillis,
-                    "delay300req" to delay300req.await().totalTimeMillis
+                    "delay40req" to delay40req.await().totalTimeMillis,
+                    "delay60req" to delay60req.await().totalTimeMillis,
+                    "delay200req" to delay100req.await().totalTimeMillis,
+                    "delay200req" to delay450req.await().totalTimeMillis,
+                    "delay300req" to delay350req.await().totalTimeMillis
                 )
             )
         }
     }
-
-
 }
 
 data class DelayResponse(val totalTimeMillis: Long)

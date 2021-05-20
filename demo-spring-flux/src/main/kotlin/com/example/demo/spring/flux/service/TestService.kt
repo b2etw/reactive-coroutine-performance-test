@@ -5,10 +5,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.ParameterizedTypeReference
-import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Service
@@ -21,28 +21,48 @@ class TestService(
 
     fun flux() =
         run {
-            val delay1000req = getResponse(1000).bodyToMono(object : ParameterizedTypeReference<Map<*, *>>() {})
-            val delay800req = getResponse(800).bodyToMono(object : ParameterizedTypeReference<Map<*, *>>() {})
-            val delay500req = getResponse(500).bodyToMono(object : ParameterizedTypeReference<Map<*, *>>() {})
-            Mono.zip(delay1000req, delay800req, delay500req)
-                .map { v ->
-                    mapOf(
-                        "delay1000req" to v.t1["totalTimeMillis"],
-                        "delay800req" to v.t2["totalTimeMillis"],
-                        "delay500req" to v.t3["totalTimeMillis"]
-                    )
-                }
+            Flux.just(40L, 60L)
+                .map { v -> getResponse(v).bodyToMono(object : ParameterizedTypeReference<Map<*, *>>() {}) }
+                .map { v: Mono<Map<*, *>> -> v.block()!!["totalTimeMillis"] }
+
+
+
+
+//            val delay40req = getResponse(40).bodyToMono(object : ParameterizedTypeReference<Map<*, *>>() {})
+//            val delay60req = getResponse(60).bodyToMono(object : ParameterizedTypeReference<Map<*, *>>() {})
+//
+//
+//
+//            Mono.zip(delay40req, delay60req)
+//                .map { v -> v.t1["totalTimeMillis"].toString().toLong() + v.t2["totalTimeMillis"].toString().toLong() }
+//                .map { v -> getResponse(40).bodyToMono(object : ParameterizedTypeReference<Map<*, *>>() {}) }
+//
+//            Mono.zip(delay40req, delay60req)
+//                .map { v ->
+//                    mapOf(
+//                        "delay1000req" to v.t1["totalTimeMillis"],
+//                        "delay800req" to v.t2["totalTimeMillis"],
+//                    )
+//                }
         }
 
     suspend fun coroutine() =
         coroutineScope {
-            val delay1000req = async(Dispatchers.IO) { getResponse(1000).awaitBody<Map<String, Long>>() }
-            val delay800req = async(Dispatchers.IO) { getResponse(800).awaitBody<Map<String, Long>>() }
-            val delay500req = async(Dispatchers.IO) { getResponse(500).awaitBody<Map<String, Long>>() }
+            val delay40req = async(Dispatchers.IO) { getResponse(40).awaitBody<Map<String, Long>>() }
+            val delay60req = async(Dispatchers.IO) { getResponse(60).awaitBody<Map<String, Long>>() }
+
+            val ms = delay40req.await()["totalTimeMillis"]!! + delay60req.await()["totalTimeMillis"]!!
+            val delay100req = async(Dispatchers.IO) { getResponse(ms).awaitBody<Map<String, Long>>() }
+
+            val delay350req = async(Dispatchers.IO) { getResponse(350).awaitBody<Map<String, Long>>() }
+            val delay450req = async(Dispatchers.IO) { getResponse(450).awaitBody<Map<String, Long>>() }
+
             mapOf(
-                "delay1000req" to delay1000req.await()["totalTimeMillis"],
-                "delay800req" to delay800req.await()["totalTimeMillis"],
-                "delay500req" to delay500req.await()["totalTimeMillis"]
+                "delay40req" to delay40req.await()["totalTimeMillis"],
+                "delay60req" to delay60req.await()["totalTimeMillis"],
+                "delay100req" to delay100req.await()["totalTimeMillis"],
+                "delay350req" to delay350req.await()["totalTimeMillis"],
+                "delay450req" to delay450req.await()["totalTimeMillis"]
             )
         }
 
