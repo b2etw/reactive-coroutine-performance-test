@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.core.publisher.Mono
+import reactor.core.publisher.Flux
 import java.util.concurrent.CompletableFuture.allOf
 
 @Service
@@ -35,27 +35,24 @@ class TestService(
         }
 
     fun mvc() =
-        Mono.zip(
-            getMonoResponse(100),
-            getMonoResponse(200)
-        )
+        Flux.mergeSequential(getMonoResponse(100), getMonoResponse(200))
+            .collectList()
             .map { v ->
-                val delay100res = v.t1["totalTimeMillis"].parseLong()
-                val delay200res = v.t2["totalTimeMillis"].parseLong()
-                val delay300res = getMonoResponse(delay100res + delay200res).block()!!["totalTimeMillis"].parseLong()
-                Mono.zip(
-                    getMonoResponse(delay300res + 100),
-                    getMonoResponse(delay300res + 200)
+                val delay100res = v[0]["totalTimeMillis"].parseLong()
+                val delay200res = v[1]["totalTimeMillis"].parseLong()
+                val delay300res = getBlockResponse(delay100res + delay200res)!!["totalTimeMillis"].parseLong()
+
+                val delay400And500res = Flux.mergeSequential(getMonoResponse(delay300res + 100), getMonoResponse(delay300res + 200))
+                    .collectList()
+                    .block()
+
+                mapOf(
+                    "delay100res" to delay100res,
+                    "delay200res" to delay200res,
+                    "delay300res" to delay300res,
+                    "delay400res" to delay400And500res!![0]["totalTimeMillis"].parseLong(),
+                    "delay500res" to delay400And500res[1]["totalTimeMillis"].parseLong()
                 )
-                    .map { v2 ->
-                        mapOf(
-                            "delay100res" to delay100res,
-                            "delay200res" to delay200res,
-                            "delay300res" to delay300res,
-                            "delay400res" to v2.t1["totalTimeMillis"].parseLong(),
-                            "delay500res" to v2.t2["totalTimeMillis"].parseLong()
-                        )
-                    }.block()
             }
 
     fun async() =
