@@ -17,66 +17,75 @@ class TestService(
 
     fun blockMvc() =
         run {
-            val delay100req = getBlockResponse(100)
-            val delay200req = getBlockResponse(200)
+            val delay100res = getBlockResponse(100)!!["totalTimeMillis"].parseLong()
+            val delay200res = getBlockResponse(200)!!["totalTimeMillis"].parseLong()
 
-            val period1 = delay100req!!["totalTimeMillis"].parseLong() + delay200req!!["totalTimeMillis"].parseLong()
-            val delay300req = getBlockResponse(period1)
+            val delay300req = getBlockResponse(delay100res + delay200res)!!["totalTimeMillis"].parseLong()
 
-            val period2 = delay300req!!["totalTimeMillis"].parseLong()
-            val delay400req = getBlockResponse(period2 + 100)
-            val delay500req = getBlockResponse(period2 + 200)
+            val delay400req = getBlockResponse(delay300req + 100)
+            val delay500req = getBlockResponse(delay300req + 200)
 
             mapOf(
-                "delay100req" to delay100req["totalTimeMillis"],
-                "delay200req" to delay200req["totalTimeMillis"],
-                "delay300req" to delay300req["totalTimeMillis"],
-                "delay400req" to delay400req!!["totalTimeMillis"],
-                "delay500req" to delay500req!!["totalTimeMillis"]
+                "delay100req" to delay100res,
+                "delay200req" to delay200res,
+                "delay300req" to delay300req,
+                "delay400req" to delay400req,
+                "delay500req" to delay500req
             )
         }
 
     fun mvc() =
-        Mono.zip(getMonoResponse(100), getMonoResponse(200))
+        Mono.zip(
+            getMonoResponse(100),
+            getMonoResponse(200)
+        )
             .map { v ->
-                val period1 = v.t1["totalTimeMillis"].parseLong() + v.t2["totalTimeMillis"].parseLong()
-                val delay300req = getMonoResponse(period1).block()!!["totalTimeMillis"].parseLong()
-                Mono.zip(getMonoResponse(delay300req + 100), getMonoResponse(delay300req + 200))
+                val delay100res = v.t1["totalTimeMillis"].parseLong()
+                val delay200res = v.t2["totalTimeMillis"].parseLong()
+                val delay300res = getMonoResponse(delay100res + delay200res).block()!!["totalTimeMillis"].parseLong()
+                Mono.zip(
+                    getMonoResponse(delay300res + 100),
+                    getMonoResponse(delay300res + 200)
+                )
                     .map { v2 ->
                         mapOf(
-                            "delay100req" to v.t1["totalTimeMillis"],
-                            "delay200req" to v.t2["totalTimeMillis"],
-                            "delay300req" to delay300req,
-                            "delay400req" to v2.t1["totalTimeMillis"],
-                            "delay500req" to v2.t2["totalTimeMillis"]
+                            "delay100res" to delay100res,
+                            "delay200res" to delay200res,
+                            "delay300res" to delay300res,
+                            "delay400res" to v2.t1["totalTimeMillis"].parseLong(),
+                            "delay500res" to v2.t2["totalTimeMillis"].parseLong()
                         )
                     }.block()
-            }.block()
+            }
 
     fun async() =
-        arrayOf(getFutureResponse(100), getFutureResponse(200))
+        arrayOf(
+            getFutureResponse(100),
+            getFutureResponse(200)
+        )
             .let {
                 allOf(*it)
                     .thenApply { v ->
                         mapOf(
-                            "delay100req" to it[0].get()["totalTimeMillis"],
-                            "delay200req" to it[1].get()["totalTimeMillis"]
+                            "delay100res" to it[0].get()["totalTimeMillis"].parseLong(),
+                            "delay200res" to it[1].get()["totalTimeMillis"].parseLong()
                         )
                     }.thenApply { v ->
-                        val period1 = v["delay100req"].parseLong() + v["delay200req"].parseLong()
-                        getFutureResponse(period1)
+                        val delay100res = v["delay100res"]!!
+                        val delay200res = v["delay200res"]!!
+                        getFutureResponse(delay100res + delay200res)
                             .thenApply { v2 ->
-                                val peroid2 = v2["totalTimeMillis"].parseLong()
-                                val delay400req = getFutureResponse(peroid2 + 100)
-                                val delay500req = getFutureResponse(peroid2 + 200)
-                                allOf(delay400req, delay500req)
+                                val delay300res = v2["totalTimeMillis"].parseLong()
+                                val delay400res = getFutureResponse(delay300res + 100)
+                                val delay500res = getFutureResponse(delay300res + 200)
+                                allOf(delay400res, delay500res)
                                     .thenApply {
                                         mapOf(
-                                            "delay100req" to v["delay100req"],
-                                            "delay200req" to v["delay200req"],
-                                            "delay300req" to peroid2,
-                                            "delay400req" to delay400req.get()["totalTimeMillis"],
-                                            "delay500req" to delay500req.get()["totalTimeMillis"]
+                                            "delay100res" to v["delay100res"],
+                                            "delay200res" to v["delay200res"],
+                                            "delay300res" to delay300res,
+                                            "delay400res" to delay400res.get()["totalTimeMillis"],
+                                            "delay500res" to delay500res.get()["totalTimeMillis"]
                                         )
                                     }
                             }
@@ -99,6 +108,6 @@ class TestService(
         .retrieve()
         .bodyToMono(object : ParameterizedTypeReference<Map<*, *>>() {})
         .toFuture()
-    
+
     fun Any?.parseLong() = this!!.toString().toLong()
 }

@@ -47,23 +47,23 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         get("/test/ktor") {
-            val delay100req = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/100") }
-            val delay200req = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/200") }
+            val delay100res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/100") }
+            val delay200res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/200") }
 
-            val peroid1 = delay100req.await().totalTimeMillis + delay200req.await().totalTimeMillis
-            val delay300req = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$peroid1") }
+            val peroid1 = delay100res.await().totalTimeMillis + delay200res.await().totalTimeMillis
+            val delay300res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$peroid1") }
 
-            val period2 = delay300req.await().totalTimeMillis
-            val delay400req = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + 100}") }
-            val delay500req = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + 200}") }
+            val period2 = delay300res.await().totalTimeMillis
+            val delay400res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + 100}") }
+            val delay500res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + 200}") }
 
             call.respond(
                 mapOf(
-                    "delay100req" to delay100req.await().totalTimeMillis,
-                    "delay200req" to delay200req.await().totalTimeMillis,
-                    "delay300req" to delay300req.await().totalTimeMillis,
-                    "delay400req" to delay400req.await().totalTimeMillis,
-                    "delay500req" to delay500req.await().totalTimeMillis
+                    "delay100res" to delay100res.await().totalTimeMillis,
+                    "delay200res" to delay200res.await().totalTimeMillis,
+                    "delay300res" to delay300res.await().totalTimeMillis,
+                    "delay400res" to delay400res.await().totalTimeMillis,
+                    "delay500res" to delay500res.await().totalTimeMillis
                 )
             )
         }
