@@ -21,21 +21,27 @@ class TestService(
     fun flux() =
         Flux.mergeSequential(getMonoResponse(100), getMonoResponse(200))
             .collectList()
-            .map { v ->
-                val delay100res = v[0]["totalTimeMillis"].parseLong()
-                val delay200res = v[1]["totalTimeMillis"].parseLong()
-                val delay300res = getBlockResponse(delay100res + delay200res)!!["totalTimeMillis"].parseLong()
-
-                val delay400And500res = Flux.mergeSequential(getMonoResponse(delay300res + 100), getMonoResponse(delay300res + 200))
+            .flatMap { v ->
+                return@flatMap getMonoResponse(300)
+                    .map { v2 ->
+                        v.add(v2)
+                        return@map v
+                    }
+            }.flatMap { v ->
+                val period = v[2]["totalTimeMillis"].parseLong()
+                Flux.mergeSequential(getMonoResponse(period + 100), getMonoResponse(period + 200))
                     .collectList()
-                    .block()
-
+                    .map { v2 ->
+                        v.addAll(v2)
+                        return@map v
+                    }
+            }.map { v ->
                 mapOf(
-                    "delay100res" to delay100res,
-                    "delay200res" to delay200res,
-                    "delay300res" to delay300res,
-                    "delay400res" to delay400And500res!![0]["totalTimeMillis"].parseLong(),
-                    "delay500res" to delay400And500res[1]["totalTimeMillis"].parseLong()
+                    "delay100res" to v[0]["totalTimeMillis"],
+                    "delay200res" to v[1]["totalTimeMillis"],
+                    "delay300res" to v[2]["totalTimeMillis"],
+                    "delay400res" to v[3]["totalTimeMillis"],
+                    "delay500res" to v[4]["totalTimeMillis"]
                 )
             }
 
