@@ -22,8 +22,8 @@ class TestService(
 
             val delay300req = getBlockResponse(delay100res + delay200res)!!["totalTimeMillis"].parseLong()
 
-            val delay400req = getBlockResponse(delay300req + 100)
-            val delay500req = getBlockResponse(delay300req + 200)
+            val delay400req = getBlockResponse(delay300req + 100)!!["totalTimeMillis"].parseLong()
+            val delay500req = getBlockResponse(delay300req + 200)!!["totalTimeMillis"].parseLong()
 
             mapOf(
                 "delay100req" to delay100res,
