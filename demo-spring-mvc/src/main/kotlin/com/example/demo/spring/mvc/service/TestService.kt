@@ -5,6 +5,7 @@ import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletableFuture.allOf
 
 @Service
@@ -62,36 +63,31 @@ class TestService(
             }
 
     fun async() =
-        arrayOf(
-            getFutureResponse(100),
-            getFutureResponse(200)
-        )
+        arrayOf(getFutureResponse(100), getFutureResponse(200))
             .let {
                 allOf(*it)
                     .thenApply { v ->
-                        mapOf(
-                            "delay100res" to it[0].get()["totalTimeMillis"].parseLong(),
-                            "delay200res" to it[1].get()["totalTimeMillis"].parseLong()
-                        )
+                        return@thenApply it.map { v1 -> v1.get() }.toMutableList()
                     }.thenApply { v ->
-                        val delay100res = v["delay100res"]!!
-                        val delay200res = v["delay200res"]!!
-                        getFutureResponse(delay100res + delay200res)
-                            .thenApply { v2 ->
-                                val delay300res = v2["totalTimeMillis"].parseLong()
-                                val delay400res = getFutureResponse(delay300res + 100)
-                                val delay500res = getFutureResponse(delay300res + 200)
-                                allOf(delay400res, delay500res)
-                                    .thenApply {
-                                        mapOf(
-                                            "delay100res" to v["delay100res"],
-                                            "delay200res" to v["delay200res"],
-                                            "delay300res" to delay300res,
-                                            "delay400res" to delay400res.get()["totalTimeMillis"],
-                                            "delay500res" to delay500res.get()["totalTimeMillis"]
-                                        )
-                                    }
+                        v.add(getBlockResponse(v[0]["totalTimeMillis"].parseLong() + v[1]["totalTimeMillis"].parseLong()))
+                        return@thenApply v
+                    }.thenApply { v ->
+                        val delay400res = getFutureResponse(v[2]["totalTimeMillis"].parseLong() + 100)
+                        val delay500res = getFutureResponse(v[2]["totalTimeMillis"].parseLong() + 200)
+                        allOf(delay400res, delay500res)
+                            .thenApply {
+                               v.add(delay400res.get())
+                               v.add(delay500res.get())
                             }
+                        return@thenApply v
+                    }.thenApply { v ->
+                        mapOf(
+                            "delay100res" to v[0]["totalTimeMillis"].parseLong(),
+                            "delay200res" to v[1]["totalTimeMillis"].parseLong(),
+                            "delay300res" to v[2]["totalTimeMillis"].parseLong(),
+                            "delay400res" to v[3]["totalTimeMillis"].parseLong(),
+                            "delay500res" to v[4]["totalTimeMillis"].parseLong()
+                        )
                     }
             }
 
