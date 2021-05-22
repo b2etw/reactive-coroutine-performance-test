@@ -11,7 +11,7 @@
 * Vert.x Coroutine
 * Ktor
 
-# 📊 Cases
+# 📄 Cases
 * Variable
   * CPU (light or intensive)
   * IO (light or intensive)
@@ -25,15 +25,15 @@
 * Wrong coding way
   * use blocking way to compare with non-blocking coding type
 
-# Deployment
+# 🧱 Deployment
 * Terraform for managing VM
 * Ansible for setting VM
 * Docker Compose for managing instances
 
-# Testing
+# 🧨 Testing
 * JMeter HTTP requests
 
-# Metrics
+# 📊 Metrics
 * Prometheus and Grafana
 
 # ☄️ Future Targets
