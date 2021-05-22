@@ -26,8 +26,15 @@
   * use blocking way to compare with non-blocking coding type
 
 # Deployment
+* Terraform for managing VM
+* Ansible for setting VM
+* Docker Compose for managing instances
+
 # Testing
+* JMeter HTTP requests
+
 # Metrics
+* Prometheus and Grafana
 
 # ☄️ Future Targets
 * [Micronaut](https://micronaut.io/)
