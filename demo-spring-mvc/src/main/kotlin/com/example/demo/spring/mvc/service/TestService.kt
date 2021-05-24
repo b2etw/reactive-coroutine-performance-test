@@ -5,7 +5,6 @@ import org.springframework.core.ParameterizedTypeReference
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CompletableFuture.allOf
 
 @Service
@@ -76,17 +75,17 @@ class TestService(
                         val delay500res = getFutureResponse(v[2]["totalTimeMillis"].parseLong() + 200)
                         allOf(delay400res, delay500res)
                             .thenApply {
-                               v.add(delay400res.get())
-                               v.add(delay500res.get())
+                                v.add(delay400res.get())
+                                v.add(delay500res.get())
+                                return@thenApply v
                             }
-                        return@thenApply v
                     }.thenApply { v ->
                         mapOf(
-                            "delay100res" to v[0]["totalTimeMillis"].parseLong(),
-                            "delay200res" to v[1]["totalTimeMillis"].parseLong(),
-                            "delay300res" to v[2]["totalTimeMillis"].parseLong(),
-                            "delay400res" to v[3]["totalTimeMillis"].parseLong(),
-                            "delay500res" to v[4]["totalTimeMillis"].parseLong()
+                            "delay100res" to v.get()[0]["totalTimeMillis"],
+                            "delay200res" to v.get()[1]["totalTimeMillis"],
+                            "delay300res" to v.get()[2]["totalTimeMillis"],
+                            "delay400res" to v.get()[3]["totalTimeMillis"],
+                            "delay500res" to v.get()[4]["totalTimeMillis"]
                         )
                     }
             }
