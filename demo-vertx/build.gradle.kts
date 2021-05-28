@@ -37,6 +37,7 @@ dependencies {
   implementation("ch.qos.logback:logback-classic:1.2.3")
   implementation("io.vertx:vertx-micrometer-metrics:4.0.3")
   implementation("io.micrometer:micrometer-registry-prometheus:1.6.5")
+  implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")
   implementation(kotlin("stdlib-jdk8"))
   testImplementation("io.vertx:vertx-junit5")
   testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")

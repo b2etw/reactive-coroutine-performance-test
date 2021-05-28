@@ -1,6 +1,5 @@
 package com.example.demo.vertx
 
-import io.vertx.core.DeploymentOptions
 import io.vertx.core.Promise
 import io.vertx.core.Vertx
 import io.vertx.core.VertxOptions
@@ -8,11 +7,15 @@ import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.Route
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
+import io.vertx.ext.web.client.WebClient
 import io.vertx.kotlin.coroutines.CoroutineVerticle
+import io.vertx.kotlin.coroutines.await
 import io.vertx.kotlin.coroutines.dispatcher
 import io.vertx.micrometer.MicrometerMetricsOptions
 import io.vertx.micrometer.PrometheusScrapingHandler
 import io.vertx.micrometer.VertxPrometheusOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
@@ -25,15 +28,27 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
     val router = Router.router(vertx)
 
     router.get("/test/coroutine").coroutineHandler { ctx ->
-      vertx.eventBus().request<JsonObject>("test", JsonObject().put("", "")).onComplete { reply ->
-        if (reply.succeeded()) {
-          ctx.response().putHeader("Content-Type", "application/json")
-          ctx.response().end(reply.result().body().encode())
-        } else {
-          log.error(reply.cause().message, reply.cause())
-          ctx.response().setStatusCode(500).end(reply.cause().message)
-        }
-      }
+      val delay100res = async(Dispatchers.IO) { getAwaitResponse(100) }
+      val delay200res = async(Dispatchers.IO) { getAwaitResponse(200) }
+      val period1 = delay100res.await().bodyAsJsonObject().getLong("totalTimeMillis") +
+        delay200res.await().bodyAsJsonObject().getLong("totalTimeMillis")
+
+      val delay300res = async(Dispatchers.IO) { getAwaitResponse(period1) }
+
+      val period2 = delay300res.await().bodyAsJsonObject().getLong("totalTimeMillis")
+      val delay400res = async(Dispatchers.IO) { getAwaitResponse(period2 + 100) }
+      val delay500res = async(Dispatchers.IO) { getAwaitResponse(period2 + 200) }
+
+      ctx.response().putHeader("Content-Type", "application/json")
+      ctx.response().end(
+        JsonObject()
+          .put("delay100res", delay100res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay200res", delay200res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay300res", delay300res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay400res", delay400res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay500res", delay500res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .encode()
+      )
     }
 
     router.route("/metrics").handler(PrometheusScrapingHandler.create())
@@ -44,7 +59,7 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
         log.info("HTTP server started on port 8080 succeeded: ${it.succeeded()}")
       }
 
-    vertx.deployVerticle(TestVerticle(), DeploymentOptions().setWorker(true).setWorkerPoolSize(1000))
+    vertx.deployVerticle(TestVerticle())
   }
 
   private fun Route.coroutineHandler(fn: suspend (RoutingContext) -> Unit): Route {
@@ -58,6 +73,16 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
       }
     }
   }
+
+  private suspend fun getAwaitResponse(ms: Long) =
+    let {
+      System.getenv().getOrDefault("DELAY_SERVICE_DOMAIN", "localhost")
+    }.run {
+      WebClient.create(vertx)
+        .get(8888, this, "/delay/ms/$ms")
+        .send()
+        .await()
+    }
 }
 
 fun main() {
