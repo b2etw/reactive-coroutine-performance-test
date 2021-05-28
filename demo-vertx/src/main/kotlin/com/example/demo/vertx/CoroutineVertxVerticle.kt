@@ -23,7 +23,11 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
 
   private val log = LoggerFactory.getLogger(this::class.java)
 
+  private val delayServiceDomain = System.getenv().getOrDefault("DELAY_SERVICE_DOMAIN", "localhost")
+
+
   override fun start(startFuture: Promise<Void>?) {
+
     val httpServer = vertx.createHttpServer()
     val router = Router.router(vertx)
 
@@ -75,14 +79,10 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
   }
 
   private suspend fun getAwaitResponse(ms: Long) =
-    let {
-      System.getenv().getOrDefault("DELAY_SERVICE_DOMAIN", "localhost")
-    }.run {
-      WebClient.create(vertx)
-        .get(8888, this, "/delay/ms/$ms")
-        .send()
-        .await()
-    }
+    WebClient.create(vertx)
+      .get(8888, delayServiceDomain, "/delay/ms/$ms")
+      .send()
+      .await()
 }
 
 fun main() {
