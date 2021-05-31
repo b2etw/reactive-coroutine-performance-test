@@ -13,9 +13,12 @@ import io.ktor.client.features.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.features.ContentNegotiation
 import io.ktor.jackson.jackson
+import io.ktor.metrics.micrometer.MicrometerMetrics
 import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.routing
+import io.micrometer.prometheus.PrometheusConfig
+import io.micrometer.prometheus.PrometheusMeterRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 
@@ -28,6 +31,10 @@ fun Application.module(testing: Boolean = false) {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)
         }
+    }
+    val appMicrometerRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
+    install(MicrometerMetrics) {
+        registry = appMicrometerRegistry
     }
 
     val client = HttpClient(CIO) {
@@ -66,6 +73,9 @@ fun Application.module(testing: Boolean = false) {
                     "delay500res" to delay500res.await().totalTimeMillis
                 )
             )
+        }
+        get("/metrics") {
+            call.respond(appMicrometerRegistry.scrape())
         }
     }
 }

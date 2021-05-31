@@ -55,7 +55,7 @@ jib {
             "-Xmx8g",
             "-Dreactor.netty.ioWorkerCount=1000",
             "-Dreactor.netty.pool.maxConnections=8192",
-            "-Ddelay.service.domain=192.168.1.140"
+            "-Ddelay.service.domain=192.168.1.41"
         )
     }
     setAllowInsecureRegistries(true)

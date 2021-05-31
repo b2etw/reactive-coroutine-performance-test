@@ -51,7 +51,7 @@ jib {
         jvmFlags = listOf(
             "-Xms8g",
             "-Xmx8g",
-            "-Ddelay.service.domain=192.168.1.140"
+            "-Ddelay.service.domain=192.168.1.41"
         )
     }
     setAllowInsecureRegistries(true)
