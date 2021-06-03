@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.5.0"
+    id("org.springframework.boot") version "2.4.6"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.google.cloud.tools.jib") version "2.5.0"
     kotlin("jvm") version "1.5.10"
@@ -54,7 +54,7 @@ jib {
             "-Xms8g",
             "-Xmx8g",
             "-Dreactor.netty.ioWorkerCount=1000",
-            "-Dreactor.netty.pool.maxConnections=8192",
+            "-Dreactor.netty.pool.maxConnections=8192"
         )
     }
     setAllowInsecureRegistries(true)
