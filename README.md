@@ -13,9 +13,12 @@
 
 # 📄 Cases
 * Variable
-  * CPU ([case1](./doc/cpu/case1/case1.md)) 
+  * CPU
+    * [case1](./doc/cpu/case1/case1.md)
   * IO
-    * Network ([case1](./doc/network/case1/case1.md))
+    * Network
+      * [case1](./doc/network/case1/case1.md)
+      * [case1](./doc/network/case1/case2.md)
     * Disk
 
 # 💫 Principle
