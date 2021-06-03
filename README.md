@@ -18,7 +18,7 @@
   * IO
     * Network
       * [case1](./doc/network/case1/case1.md)
-      * [case1](./doc/network/case1/case2.md)
+      * [case2](./doc/network/case1/case2.md)
     * Disk
 
 # 💫 Principle
