@@ -4,8 +4,8 @@ plugins {
     id("org.springframework.boot") version "2.4.6"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.google.cloud.tools.jib") version "2.5.0"
-    kotlin("jvm") version "1.5.10"
-    kotlin("plugin.spring") version "1.5.10"
+    kotlin("jvm") version "1.4.32"
+    kotlin("plugin.spring") version "1.4.32"
 }
 
 group = "com.example"
@@ -18,15 +18,12 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.projectreactor:reactor-test")
 }
 
 tasks.withType<KotlinCompile> {
@@ -52,9 +49,7 @@ jib {
         mainClass = "com.example.demo.delay.service.DemoDelayServiceApplicationKt"
         jvmFlags = listOf(
             "-Xms8g",
-            "-Xmx8g",
-            "-Dreactor.netty.ioWorkerCount=1000",
-            "-Dreactor.netty.pool.maxConnections=8192"
+            "-Xmx8g"
         )
     }
     setAllowInsecureRegistries(true)
