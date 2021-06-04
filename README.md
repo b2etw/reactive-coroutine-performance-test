@@ -1,6 +1,6 @@
 # 🎓 Reactive X Coroutine X Performance Test
-* We use Kotlin with popular HTTP Server Side Applications to compare its performance on specific cases. 
-* Comparing its performance on CPU, Network IO or Disk intensive cases.
+* We use Kotlin with popular frameworks and compare its performance on specific cases. 
+* Comparing its performance on CPU or IO(Network, Disk) intensive cases.
 
 # 🎯 Target
 * Spring MVC (Servlet)
@@ -13,15 +13,17 @@
 
 # 📄 Cases
 * Variable
-  * CPU (light or intensive)
-  * IO (light or intensive)
-    * Memory
-    * Network ([case1](./doc/case1/case1.md))
+  * CPU
+    * [case1](./doc/cpu/case1/case1.md)
+  * IO
+    * Network
+      * [case1](./doc/network/case1/case1.md)
+      * [case2](./doc/network/case1/case2.md)
     * Disk
 
 # 💫 Principle
-* We're doing performance mix load testing not pressure testing
-  * use proper RPS instead as high as possible
+* We're doing performance testing ([ref1](https://www.guru99.com/performance-vs-load-vs-stress-testing.html), [ref2](https://www.blazemeter.com/blog/performance-testing-vs-load-testing-vs-stress-testing))
+  * use proper RPS and review the metrics
 * Wrong coding way
   * use blocking way to compare with non-blocking coding type
 
