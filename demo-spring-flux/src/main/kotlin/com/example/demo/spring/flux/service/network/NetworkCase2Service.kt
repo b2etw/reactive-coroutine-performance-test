@@ -1,4 +1,4 @@
-package com.example.demo.spring.flux.service
+package com.example.demo.spring.flux.service.network
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.awaitBody
 import reactor.core.publisher.Flux
 
 @Service
-class TestService(
+class NetworkCase2Service(
     val webClient: WebClient
 ) {
 
@@ -65,12 +65,6 @@ class TestService(
                 "delay500res" to delay500res.await()["totalTimeMillis"]!!
             )
         }
-
-    private fun getBlockResponse(ms: Long) = webClient.get()
-        .uri("http://$domain:8888/delay/ms/$ms")
-        .retrieve()
-        .bodyToMono(object : ParameterizedTypeReference<Map<*, *>>() {})
-        .block()
 
     private fun getMonoResponse(ms: Long) = webClient.get()
         .uri("http://$domain:8888/delay/ms/$ms")
