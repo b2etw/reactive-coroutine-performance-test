@@ -1,5 +1,6 @@
 package com.example
 
+import at.favre.lib.crypto.bcrypt.BCrypt
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -46,14 +47,33 @@ fun Application.module(testing: Boolean = false) {
         }
         engine {
             threadsCount = 1000
-//            maxConnectionsCount = 8192
         }
     }
 
     val delayServiceDomain = environment.config.property("ktor.delay.service.domain").getString()
 
     routing {
-        get("/test/ktor") {
+        get("/test/ktor/cpu/1") {
+            call.respond(
+                mapOf(
+                    "Hello World / 14" to BCrypt.withDefaults().hashToString(14, "Hello World".toCharArray())
+                )
+            )
+        }
+        get("/test/ktor/network/1") {
+            val delay200res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/200") }
+            val delay300res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/300") }
+            val delay500res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/500") }
+
+            call.respond(
+                mapOf(
+                    "delay200res" to delay200res.await().totalTimeMillis,
+                    "delay300res" to delay300res.await().totalTimeMillis,
+                    "delay500res" to delay500res.await().totalTimeMillis
+                )
+            )
+        }
+        get("/test/ktor/network/2") {
             val delay100res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/100") }
             val delay200res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/200") }
 
