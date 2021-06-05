@@ -61,15 +61,15 @@ fun Application.module(testing: Boolean = false) {
             )
         }
         get("/test/ktor/network/1") {
-            val delay200res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/200") }
-            val delay300res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/300") }
             val delay500res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/500") }
+            val delay800res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/800") }
+            val delay1000res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/1000") }
 
             call.respond(
                 mapOf(
-                    "delay200res" to delay200res.await().totalTimeMillis,
-                    "delay300res" to delay300res.await().totalTimeMillis,
-                    "delay500res" to delay500res.await().totalTimeMillis
+                    "delay500res" to delay500res.await().totalTimeMillis,
+                    "delay800res" to delay800res.await().totalTimeMillis,
+                    "delay1000res" to delay1000res.await().totalTimeMillis
                 )
             )
         }
