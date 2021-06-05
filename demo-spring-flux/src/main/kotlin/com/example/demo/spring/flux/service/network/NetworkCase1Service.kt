@@ -19,26 +19,26 @@ class NetworkCase1Service(
     val domain: String = ""
 
     fun flux() =
-        Flux.mergeSequential(getMonoResponse(200), getMonoResponse(300), getMonoResponse(300))
+        Flux.mergeSequential(getMonoResponse(500), getMonoResponse(800), getMonoResponse(1000))
             .collectList()
             .map { v ->
                 mapOf(
-                    "delay200res" to v[0]["totalTimeMillis"],
-                    "delay300res" to v[1]["totalTimeMillis"],
-                    "delay500res" to v[2]["totalTimeMillis"]
+                    "delay500res" to v[0]["totalTimeMillis"],
+                    "delay800res" to v[1]["totalTimeMillis"],
+                    "delay1000res" to v[2]["totalTimeMillis"]
                 )
             }
 
     suspend fun coroutine() =
         coroutineScope {
-            val delay200res = async(Dispatchers.IO) { getAwaitResponse(200) }
-            val delay300res = async(Dispatchers.IO) { getAwaitResponse(300) }
             val delay500res = async(Dispatchers.IO) { getAwaitResponse(500) }
+            val delay800res = async(Dispatchers.IO) { getAwaitResponse(800) }
+            val delay1000res = async(Dispatchers.IO) { getAwaitResponse(1000) }
 
             mapOf(
-                "delay200res" to delay200res.await()["totalTimeMillis"]!!,
-                "delay300res" to delay300res.await()["totalTimeMillis"]!!,
-                "delay500res" to delay500res.await()["totalTimeMillis"]!!
+                "delay500res" to delay500res.await()["totalTimeMillis"]!!,
+                "delay800res" to delay800res.await()["totalTimeMillis"]!!,
+                "delay1000res" to delay1000res.await()["totalTimeMillis"]!!
             )
         }
 
