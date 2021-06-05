@@ -17,40 +17,40 @@ class NetworkCase1Service(
 
     fun blockMvc() =
         run {
-            val delay200res = getBlockResponse(200)!!["totalTimeMillis"]
-            val delay300req = getBlockResponse(300)!!["totalTimeMillis"]
-            val delay500req = getBlockResponse(500)!!["totalTimeMillis"]
+            val delay500res = getBlockResponse(500)!!["totalTimeMillis"]
+            val delay800req = getBlockResponse(800)!!["totalTimeMillis"]
+            val delay1000req = getBlockResponse(1000)!!["totalTimeMillis"]
 
             mapOf(
-                "delay200req" to delay200res,
-                "delay300req" to delay300req,
-                "delay500req" to delay500req
+                "delay500req" to delay500res,
+                "delay800req" to delay800req,
+                "delay1000req" to delay1000req
             )
         }
 
     fun mvc() =
-        Flux.mergeSequential(getMonoResponse(200), getMonoResponse(300), getMonoResponse(500))
+        Flux.mergeSequential(getMonoResponse(500), getMonoResponse(800), getMonoResponse(1000))
             .collectList()
             .map { v ->
                 mapOf(
-                    "delay200res" to v[0]["totalTimeMillis"],
-                    "delay300res" to v[1]["totalTimeMillis"],
-                    "delay500res" to v[2]["totalTimeMillis"]
+                    "delay500res" to v[0]["totalTimeMillis"],
+                    "delay800res" to v[1]["totalTimeMillis"],
+                    "delay1000res" to v[2]["totalTimeMillis"]
                 )
             }
             .block()
 
     fun async() =
-        arrayOf(getFutureResponse(200), getFutureResponse(300), getFutureResponse(500))
+        arrayOf(getFutureResponse(500), getFutureResponse(800), getFutureResponse(1000))
             .let {
                 allOf(*it)
                     .thenApply { v ->
                         return@thenApply it.map { v1 -> v1.get() }
                     }.thenApply { v ->
                         mapOf(
-                            "delay200res" to v[0]["totalTimeMillis"],
-                            "delay300res" to v[1]["totalTimeMillis"],
-                            "delay500res" to v[2]["totalTimeMillis"]
+                            "delay500res" to v[0]["totalTimeMillis"],
+                            "delay800res" to v[1]["totalTimeMillis"],
+                            "delay1000res" to v[2]["totalTimeMillis"]
                         )
                     }
             }
