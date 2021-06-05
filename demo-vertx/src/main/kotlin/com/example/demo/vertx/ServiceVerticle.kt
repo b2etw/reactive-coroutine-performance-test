@@ -1,5 +1,6 @@
 package com.example.demo.vertx
 
+import at.favre.lib.crypto.bcrypt.BCrypt
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.CompositeFuture.all
 import io.vertx.core.Promise
@@ -10,12 +11,39 @@ import io.vertx.ext.web.client.WebClient
 import io.vertx.kotlin.core.json.get
 
 
-class TestVerticle : AbstractVerticle() {
+class ServiceVerticle : AbstractVerticle() {
 
   val delayServiceDomain = System.getenv().getOrDefault("DELAY_SERVICE_DOMAIN", "localhost")
 
   override fun start(startPromise: Promise<Void>?) {
-    vertx.eventBus().consumer<JsonObject>("test") {
+    vertx.eventBus().consumer<JsonObject>("test.vertx.cpu.1") {
+      it.reply(
+        JsonObject(
+          mapOf(
+            "Hello World / 14" to BCrypt.withDefaults().hashToString(14, "Hello World".toCharArray())
+          )
+        )
+      )
+    }
+    vertx.eventBus().consumer<JsonObject>("test.vertx.network.1") {
+      all(getFutureResponse(500), getFutureResponse(800), getFutureResponse(1000))
+        .onSuccess { res ->
+          val delay500res = res.result().resultAt<HttpResponse<Buffer>>(0).bodyAsJsonObject().get<Long>("totalTimeMillis")
+          val delay800res = res.result().resultAt<HttpResponse<Buffer>>(1).bodyAsJsonObject().get<Long>("totalTimeMillis")
+          val delay1000res = res.result().resultAt<HttpResponse<Buffer>>(2).bodyAsJsonObject().get<Long>("totalTimeMillis")
+
+          it.reply(
+            JsonObject(
+              mapOf(
+               "delay500" to delay500res,
+               "delay800" to delay800res,
+               "delay1000" to delay1000res
+              )
+            )
+          )
+        }
+    }
+    vertx.eventBus().consumer<JsonObject>("test.vertx.network.2") {
       val resultJson = JsonObject()
       all(getFutureResponse(100), getFutureResponse(200))
         .compose { res ->

@@ -31,7 +31,22 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
     val httpServer = vertx.createHttpServer()
     val router = Router.router(vertx)
 
-    router.get("/test/coroutine").coroutineHandler { ctx ->
+    router.get("/test/coroutine/network/1").coroutineHandler { ctx ->
+      val delay500res = async(Dispatchers.IO) { getAwaitResponse(500) }
+      val delay800res = async(Dispatchers.IO) { getAwaitResponse(800) }
+      val delay1000res = async(Dispatchers.IO) { getAwaitResponse(1000) }
+
+      ctx.response().putHeader("Content-Type", "application/json")
+      ctx.response().end(
+        JsonObject()
+          .put("delay500res", delay500res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay800res", delay800res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay1000res", delay1000res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .encode()
+      )
+    }
+
+    router.get("/test/coroutine/network/2").coroutineHandler { ctx ->
       val delay100res = async(Dispatchers.IO) { getAwaitResponse(100) }
       val delay200res = async(Dispatchers.IO) { getAwaitResponse(200) }
       val period1 = delay100res.await().bodyAsJsonObject().getLong("totalTimeMillis") +
@@ -63,7 +78,7 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
         log.info("HTTP server started on port 8080 succeeded: ${it.succeeded()}")
       }
 
-    vertx.deployVerticle(TestVerticle())
+    vertx.deployVerticle(ServiceVerticle())
   }
 
   private fun Route.coroutineHandler(fn: suspend (RoutingContext) -> Unit): Route {

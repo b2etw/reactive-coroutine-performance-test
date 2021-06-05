@@ -29,6 +29,7 @@ application {
 }
 
 dependencies {
+  implementation("at.favre.lib:bcrypt:0.9.0")
   implementation(platform("io.vertx:vertx-stack-depchain:$vertxVersion"))
   implementation("io.vertx:vertx-web-client")
   implementation("io.vertx:vertx-web")

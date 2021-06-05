@@ -21,8 +21,32 @@ class VertxVerticle : AbstractVerticle() {
     val httpServer = vertx.createHttpServer()
     val router = Router.router(vertx)
 
-    router.get("/test/vertx").handler { ctx ->
-      vertx.eventBus().request<JsonObject>("test", JsonObject().put("", "")).onComplete { reply ->
+    router.get("/test/vertx/cpu/1").handler { ctx ->
+      vertx.eventBus().request<JsonObject>("test.vertx.cpu.1", JsonObject().put("", "")).onComplete { reply ->
+        if (reply.succeeded()) {
+          ctx.response().putHeader("Content-Type", "application/json")
+          ctx.response().end(reply.result().body().encode())
+        } else {
+          log.error(reply.cause().message, reply.cause())
+          ctx.response().setStatusCode(500).end(reply.cause().message)
+        }
+      }
+    }
+
+    router.get("/test/vertx/network/1").handler { ctx ->
+      vertx.eventBus().request<JsonObject>("test.vertx.network.1", JsonObject().put("", "")).onComplete { reply ->
+        if (reply.succeeded()) {
+          ctx.response().putHeader("Content-Type", "application/json")
+          ctx.response().end(reply.result().body().encode())
+        } else {
+          log.error(reply.cause().message, reply.cause())
+          ctx.response().setStatusCode(500).end(reply.cause().message)
+        }
+      }
+    }
+
+    router.get("/test/vertx/network/2").handler { ctx ->
+      vertx.eventBus().request<JsonObject>("test.vertx.network.2", JsonObject().put("", "")).onComplete { reply ->
         if (reply.succeeded()) {
           ctx.response().putHeader("Content-Type", "application/json")
           ctx.response().end(reply.result().body().encode())
@@ -41,7 +65,7 @@ class VertxVerticle : AbstractVerticle() {
         log.info("HTTP server started on port 8080 succeeded: ${it.succeeded()}")
       }
 
-    vertx.deployVerticle(TestVerticle(), DeploymentOptions().setWorker(true).setWorkerPoolSize(1000))
+    vertx.deployVerticle(ServiceVerticle(), DeploymentOptions().setWorker(true).setWorkerPoolSize(1000))
   }
 }
 
