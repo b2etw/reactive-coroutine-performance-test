@@ -3,8 +3,8 @@
 * Comparing its performance on CPU or IO(Network, Disk) intensive cases.
 
 # 🎯 Target
-* Spring MVC (Servlet)
-* Spring MVC Async (Servlet Async)
+* Spring MVC
+* Spring MVC Async
 * Spring WebFlux
 * Spring WebFlux Coroutine
 * Vert.x
