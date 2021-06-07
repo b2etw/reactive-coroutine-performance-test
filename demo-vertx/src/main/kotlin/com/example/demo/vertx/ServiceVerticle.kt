@@ -17,52 +17,60 @@ class ServiceVerticle : AbstractVerticle() {
 
   override fun start(startPromise: Promise<Void>?) {
     vertx.eventBus().consumer<JsonObject>("test.vertx.cpu.1") {
+      val round = it.body().get<Int>("round")
       it.reply(
         JsonObject(
           mapOf(
-            "Hello World / 14" to BCrypt.withDefaults().hashToString(14, "Hello World".toCharArray())
+            "Hello World / $round" to BCrypt.withDefaults().hashToString(round, "Hello World".toCharArray())
           )
         )
       )
     }
     vertx.eventBus().consumer<JsonObject>("test.vertx.network.1") {
-      all(getFutureResponse(500), getFutureResponse(800), getFutureResponse(1000))
+      val time1 = it.body().get<Long>("time1")
+      val time2 = it.body().get<Long>("time2")
+      val time3 = it.body().get<Long>("time3")
+      all(getFutureResponse(time1), getFutureResponse(time2), getFutureResponse(time3))
         .onSuccess { res ->
-          val delay500res = res.result().resultAt<HttpResponse<Buffer>>(0).bodyAsJsonObject().get<Long>("totalTimeMillis")
-          val delay800res = res.result().resultAt<HttpResponse<Buffer>>(1).bodyAsJsonObject().get<Long>("totalTimeMillis")
-          val delay1000res = res.result().resultAt<HttpResponse<Buffer>>(2).bodyAsJsonObject().get<Long>("totalTimeMillis")
+          val delayTime1Res = res.result().resultAt<HttpResponse<Buffer>>(0).bodyAsJsonObject().get<Long>("totalTimeMillis")
+          val delayTime2Res = res.result().resultAt<HttpResponse<Buffer>>(1).bodyAsJsonObject().get<Long>("totalTimeMillis")
+          val delayTime3Res = res.result().resultAt<HttpResponse<Buffer>>(2).bodyAsJsonObject().get<Long>("totalTimeMillis")
 
           it.reply(
             JsonObject(
               mapOf(
-               "delay500" to delay500res,
-               "delay800" to delay800res,
-               "delay1000" to delay1000res
+               "delay${time1}Res" to delayTime1Res,
+               "delay${time2}Res" to delayTime2Res,
+               "delay${time3}Res" to delayTime3Res
               )
             )
           )
         }
     }
     vertx.eventBus().consumer<JsonObject>("test.vertx.network.2") {
+      val time1 = it.body().get<Long>("time1")
+      val time2 = it.body().get<Long>("time2")
+      val delta1 = it.body().get<Long>("delta1")
+      val delta2 = it.body().get<Long>("delta2")
       val resultJson = JsonObject()
-      all(getFutureResponse(100), getFutureResponse(200))
+      all(getFutureResponse(time1), getFutureResponse(time2))
         .compose { res ->
           val t1 = res.result().resultAt<HttpResponse<Buffer>>(0).bodyAsJsonObject().get<Long>("totalTimeMillis")
           val t2 = res.result().resultAt<HttpResponse<Buffer>>(1).bodyAsJsonObject().get<Long>("totalTimeMillis")
-          resultJson.put("delay100res", t1)
-          resultJson.put("delay200res", t2)
+          resultJson.put("delay${time1}Res", t1)
+          resultJson.put("delay${time2}Res", t2)
 
           getFutureResponse(t1 + t2)
         }.compose { res ->
           val t3 = res.bodyAsJsonObject().get<Long>("totalTimeMillis")
-          resultJson.put("delay300res", t3)
+          resultJson.put("delay${time1 + time2}Res", t3)
 
-          all(getFutureResponse(t3 + 100), getFutureResponse(t3 + 200))
+          all(getFutureResponse(t3 + delta1), getFutureResponse(t3 + delta2))
         }.onSuccess { res ->
           val t4 = res.result().resultAt<HttpResponse<Buffer>>(0).bodyAsJsonObject().get<Long>("totalTimeMillis")
           val t5 = res.result().resultAt<HttpResponse<Buffer>>(1).bodyAsJsonObject().get<Long>("totalTimeMillis")
-          resultJson.put("delay400res", t4)
-          resultJson.put("delay500res", t5)
+          resultJson.put("delay${time1 + time2 + delta1}Res", t4)
+          resultJson.put("delay${time1 + time2 + delta2}Res", t5)
 
           it.reply(resultJson)
         }

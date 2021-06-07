@@ -22,7 +22,10 @@ class VertxVerticle : AbstractVerticle() {
     val router = Router.router(vertx)
 
     router.get("/test/vertx/cpu/1").handler { ctx ->
-      vertx.eventBus().request<JsonObject>("test.vertx.cpu.1", JsonObject().put("", "")).onComplete { reply ->
+      vertx.eventBus().request<JsonObject>(
+        "test.vertx.cpu.1",
+        JsonObject().put("round", ctx.queryParam("round")[0].toInt())
+      ).onComplete { reply ->
         if (reply.succeeded()) {
           ctx.response().putHeader("Content-Type", "application/json")
           ctx.response().end(reply.result().body().encode())
@@ -34,7 +37,13 @@ class VertxVerticle : AbstractVerticle() {
     }
 
     router.get("/test/vertx/network/1").handler { ctx ->
-      vertx.eventBus().request<JsonObject>("test.vertx.network.1", JsonObject().put("", "")).onComplete { reply ->
+      vertx.eventBus().request<JsonObject>(
+        "test.vertx.network.1",
+        JsonObject()
+          .put("time1", ctx.queryParam("time1")[0].toLong())
+          .put("time2", ctx.queryParam("time2")[0].toLong())
+          .put("time3", ctx.queryParam("time3")[0].toLong())
+      ).onComplete { reply ->
         if (reply.succeeded()) {
           ctx.response().putHeader("Content-Type", "application/json")
           ctx.response().end(reply.result().body().encode())
@@ -46,7 +55,14 @@ class VertxVerticle : AbstractVerticle() {
     }
 
     router.get("/test/vertx/network/2").handler { ctx ->
-      vertx.eventBus().request<JsonObject>("test.vertx.network.2", JsonObject().put("", "")).onComplete { reply ->
+      vertx.eventBus().request<JsonObject>(
+        "test.vertx.network.2",
+        JsonObject()
+          .put("time1", ctx.queryParam("time1")[0].toLong())
+          .put("time2", ctx.queryParam("time2")[0].toLong())
+          .put("delta1", ctx.queryParam("delta1")[0].toLong())
+          .put("delta2", ctx.queryParam("delta2")[0].toLong())
+      ).onComplete { reply ->
         if (reply.succeeded()) {
           ctx.response().putHeader("Content-Type", "application/json")
           ctx.response().end(reply.result().body().encode())

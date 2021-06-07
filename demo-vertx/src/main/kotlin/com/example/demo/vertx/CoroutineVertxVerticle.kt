@@ -25,47 +25,54 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
 
   private val delayServiceDomain = System.getenv().getOrDefault("DELAY_SERVICE_DOMAIN", "localhost")
 
-
   override fun start(startFuture: Promise<Void>?) {
-
     val httpServer = vertx.createHttpServer()
     val router = Router.router(vertx)
 
     router.get("/test/coroutine/network/1").coroutineHandler { ctx ->
-      val delay500res = async(Dispatchers.IO) { getAwaitResponse(500) }
-      val delay800res = async(Dispatchers.IO) { getAwaitResponse(800) }
-      val delay1000res = async(Dispatchers.IO) { getAwaitResponse(1000) }
+      val time1 = ctx.queryParam("time1")[0].toLong()
+      val time2 = ctx.queryParam("time2")[0].toLong()
+      val time3 = ctx.queryParam("time3")[0].toLong()
+
+      val delayTime1Res = async(Dispatchers.IO) { getAwaitResponse(time1) }
+      val delayTime2Res = async(Dispatchers.IO) { getAwaitResponse(time2) }
+      val delayTime3Res = async(Dispatchers.IO) { getAwaitResponse(time3) }
 
       ctx.response().putHeader("Content-Type", "application/json")
       ctx.response().end(
         JsonObject()
-          .put("delay500res", delay500res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
-          .put("delay800res", delay800res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
-          .put("delay1000res", delay1000res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay${time1}Res", delayTime1Res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay${time2}Res", delayTime2Res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay${time3}Res", delayTime3Res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
           .encode()
       )
     }
 
     router.get("/test/coroutine/network/2").coroutineHandler { ctx ->
-      val delay100res = async(Dispatchers.IO) { getAwaitResponse(100) }
-      val delay200res = async(Dispatchers.IO) { getAwaitResponse(200) }
-      val period1 = delay100res.await().bodyAsJsonObject().getLong("totalTimeMillis") +
-        delay200res.await().bodyAsJsonObject().getLong("totalTimeMillis")
+      val time1 = ctx.queryParam("time1")[0].toLong()
+      val time2 = ctx.queryParam("time2")[0].toLong()
+      val delta1 = ctx.queryParam("delta1")[0].toLong()
+      val delta2 = ctx.queryParam("delta2")[0].toLong()
 
-      val delay300res = async(Dispatchers.IO) { getAwaitResponse(period1) }
+      val delayTime1Res = async(Dispatchers.IO) { getAwaitResponse(time1) }
+      val delayTime2Res = async(Dispatchers.IO) { getAwaitResponse(time2) }
+      val period1 = delayTime1Res.await().bodyAsJsonObject().getLong("totalTimeMillis") +
+        delayTime2Res.await().bodyAsJsonObject().getLong("totalTimeMillis")
 
-      val period2 = delay300res.await().bodyAsJsonObject().getLong("totalTimeMillis")
-      val delay400res = async(Dispatchers.IO) { getAwaitResponse(period2 + 100) }
-      val delay500res = async(Dispatchers.IO) { getAwaitResponse(period2 + 200) }
+      val delayTime3Res = async(Dispatchers.IO) { getAwaitResponse(period1) }
+
+      val period2 = delayTime3Res.await().bodyAsJsonObject().getLong("totalTimeMillis")
+      val delayTime4Res = async(Dispatchers.IO) { getAwaitResponse(period2 + delta1) }
+      val delayTime5Res = async(Dispatchers.IO) { getAwaitResponse(period2 + delta2) }
 
       ctx.response().putHeader("Content-Type", "application/json")
       ctx.response().end(
         JsonObject()
-          .put("delay100res", delay100res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
-          .put("delay200res", delay200res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
-          .put("delay300res", delay300res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
-          .put("delay400res", delay400res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
-          .put("delay500res", delay500res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay${time1}Res", delayTime1Res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay${time2}Res", delayTime2Res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay${time1 + time2}Res", delayTime3Res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay${time1 + time2 + delta1}Res", delayTime4Res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
+          .put("delay${time1 + time2 + delta2}Res", delayTime5Res.await().bodyAsJsonObject().getLong("totalTimeMillis"))
           .encode()
       )
     }

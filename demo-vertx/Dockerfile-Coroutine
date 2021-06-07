@@ -9,7 +9,6 @@ ENV VERTICLE_FILE build/libs/demo-vertx-1.0.0-SNAPSHOT-fat.jar
 COPY $VERTICLE_FILE /opt
 
 # Launch the verticle
-ENV DELAY_SERVICE_DOMAIN 192.168.1.41
 WORKDIR /opt
 ENTRYPOINT ["sh", "-c"]
 CMD ["java -cp /opt/* $VERTICLE_NAME"]
