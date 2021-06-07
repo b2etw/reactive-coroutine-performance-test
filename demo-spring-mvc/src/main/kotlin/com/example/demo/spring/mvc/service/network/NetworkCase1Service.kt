@@ -15,42 +15,42 @@ class NetworkCase1Service(
     @Value("\${delay.service.domain}")
     val domain: String = ""
 
-    fun blockMvc() =
+    fun blockMvc(time1: Long, time2: Long, time3: Long) =
         run {
-            val delay500res = getBlockResponse(500)!!["totalTimeMillis"]
-            val delay800req = getBlockResponse(800)!!["totalTimeMillis"]
-            val delay1000req = getBlockResponse(1000)!!["totalTimeMillis"]
+            val delayTime1Res = getBlockResponse(time1)!!["totalTimeMillis"]
+            val delayTime2Res = getBlockResponse(time2)!!["totalTimeMillis"]
+            val delayTime3Res = getBlockResponse(time3)!!["totalTimeMillis"]
 
             mapOf(
-                "delay500req" to delay500res,
-                "delay800req" to delay800req,
-                "delay1000req" to delay1000req
+                "delay${time1}Res" to delayTime1Res,
+                "delay${time2}Res" to delayTime2Res,
+                "delay${time3}Res" to delayTime3Res
             )
         }
 
-    fun mvc() =
-        Flux.mergeSequential(getMonoResponse(500), getMonoResponse(800), getMonoResponse(1000))
+    fun mvc(time1: Long, time2: Long, time3: Long) =
+        Flux.mergeSequential(getMonoResponse(time1), getMonoResponse(time2), getMonoResponse(time3))
             .collectList()
             .map { v ->
                 mapOf(
-                    "delay500res" to v[0]["totalTimeMillis"],
-                    "delay800res" to v[1]["totalTimeMillis"],
-                    "delay1000res" to v[2]["totalTimeMillis"]
+                    "delay${time1}Res" to v[0]["totalTimeMillis"],
+                    "delay${time2}Res" to v[1]["totalTimeMillis"],
+                    "delay${time3}Res" to v[2]["totalTimeMillis"]
                 )
             }
             .block()
 
-    fun async() =
-        arrayOf(getFutureResponse(500), getFutureResponse(800), getFutureResponse(1000))
+    fun async(time1: Long, time2: Long, time3: Long) =
+        arrayOf(getFutureResponse(time1), getFutureResponse(time2), getFutureResponse(time3))
             .let {
                 allOf(*it)
                     .thenApply { v ->
                         return@thenApply it.map { v1 -> v1.get() }
                     }.thenApply { v ->
                         mapOf(
-                            "delay500res" to v[0]["totalTimeMillis"],
-                            "delay800res" to v[1]["totalTimeMillis"],
-                            "delay1000res" to v[2]["totalTimeMillis"]
+                            "delay${time1}Res" to v[0]["totalTimeMillis"],
+                            "delay${time2}Res" to v[1]["totalTimeMillis"],
+                            "delay${time3}Res" to v[2]["totalTimeMillis"]
                         )
                     }
             }

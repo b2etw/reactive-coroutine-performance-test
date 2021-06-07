@@ -51,8 +51,7 @@ jib {
         mainClass = "com.example.demo.spring.mvc.DemoSpringMvcApplicationKt"
         jvmFlags = listOf(
             "-Xms8g",
-            "-Xmx8g",
-            "-Ddelay.service.domain=192.168.1.41"
+            "-Xmx8g"
         )
     }
     setAllowInsecureRegistries(true)

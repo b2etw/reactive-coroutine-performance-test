@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service
 @Service
 class CpuCase1Service {
 
-    fun mvc() =
+    fun mvc(round: Int) =
         mapOf(
-            "Hello World / 14" to BCrypt.withDefaults().hashToString(14, "Hello World".toCharArray())
+            "Hello World / $round" to BCrypt.withDefaults().hashToString(round, "Hello World".toCharArray())
         )
 }

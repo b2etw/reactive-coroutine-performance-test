@@ -14,37 +14,37 @@ class NetworkCase2Service(
     @Value("\${delay.service.domain}")
     val domain: String = ""
 
-    fun blockMvc() =
+    fun blockMvc(time1: Long, time2: Long, delta1: Long, delta2: Long) =
         run {
-            val delay100res = getBlockResponse(100)!!["totalTimeMillis"].parseLong()
-            val delay200res = getBlockResponse(200)!!["totalTimeMillis"].parseLong()
+            val delayTime1Res = getBlockResponse(time1)!!["totalTimeMillis"].parseLong()
+            val delayTime2Res = getBlockResponse(time2)!!["totalTimeMillis"].parseLong()
 
-            val delay300req = getBlockResponse(delay100res + delay200res)!!["totalTimeMillis"].parseLong()
+            val delayTime3Res = getBlockResponse(delayTime1Res + delayTime2Res)!!["totalTimeMillis"].parseLong()
 
-            val delay400req = getBlockResponse(delay300req + 100)!!["totalTimeMillis"].parseLong()
-            val delay500req = getBlockResponse(delay300req + 200)!!["totalTimeMillis"].parseLong()
+            val delayTime4Res = getBlockResponse(delayTime3Res + delta1)!!["totalTimeMillis"].parseLong()
+            val delayTime5Res = getBlockResponse(delayTime3Res + delta2)!!["totalTimeMillis"].parseLong()
 
             mapOf(
-                "delay100req" to delay100res,
-                "delay200req" to delay200res,
-                "delay300req" to delay300req,
-                "delay400req" to delay400req,
-                "delay500req" to delay500req
+                "delay${time1}Res" to delayTime1Res,
+                "delay${time2}Res" to delayTime2Res,
+                "delay${time1 + time2}Res" to delayTime3Res,
+                "delay${time1 + time2 + delta1}Res" to delayTime4Res,
+                "delay${time1 + time2 + delta2}Res" to delayTime5Res
             )
         }
 
-    fun mvc() =
-        Flux.mergeSequential(getMonoResponse(100), getMonoResponse(200))
+    fun mvc(time1: Long, time2: Long, delta1: Long, delta2: Long) =
+        Flux.mergeSequential(getMonoResponse(time1), getMonoResponse(time2))
             .collectList()
             .flatMap { v ->
-                return@flatMap getMonoResponse(300)
+                return@flatMap getMonoResponse(time1 + time2)
                     .map { v2 ->
                         v.add(v2)
                         return@map v
                     }
             }.flatMap { v ->
                 val period = v[2]["totalTimeMillis"].parseLong()
-                Flux.mergeSequential(getMonoResponse(period + 100), getMonoResponse(period + 200))
+                Flux.mergeSequential(getMonoResponse(period + delta1), getMonoResponse(period + delta2))
                     .collectList()
                     .map { v2 ->
                         v.addAll(v2)
@@ -52,26 +52,26 @@ class NetworkCase2Service(
                     }
             }.map { v ->
                 mapOf(
-                    "delay100res" to v[0]["totalTimeMillis"],
-                    "delay200res" to v[1]["totalTimeMillis"],
-                    "delay300res" to v[2]["totalTimeMillis"],
-                    "delay400res" to v[3]["totalTimeMillis"],
-                    "delay500res" to v[4]["totalTimeMillis"]
+                    "delay${time1}Res" to v[0]["totalTimeMillis"],
+                    "delay${time2}Res" to v[1]["totalTimeMillis"],
+                    "delay${time1 + time2}Res" to v[2]["totalTimeMillis"],
+                    "delay${time1 + time2 + delta1}Res" to v[3]["totalTimeMillis"],
+                    "delay${time1 + time2 + delta2}Res" to v[4]["totalTimeMillis"]
                 )
             }.block()
 
-    fun async() =
-        Flux.mergeSequential(getMonoResponse(100), getMonoResponse(200))
+    fun async(time1: Long, time2: Long, delta1: Long, delta2: Long) =
+        Flux.mergeSequential(getMonoResponse(time1), getMonoResponse(time2))
             .collectList()
             .flatMap { v ->
-                return@flatMap getMonoResponse(300)
+                return@flatMap getMonoResponse(time1 + time2)
                     .map { v2 ->
                         v.add(v2)
                         return@map v
                     }
             }.flatMap { v ->
                 val period = v[2]["totalTimeMillis"].parseLong()
-                Flux.mergeSequential(getMonoResponse(period + 100), getMonoResponse(period + 200))
+                Flux.mergeSequential(getMonoResponse(period + delta1), getMonoResponse(period + delta2))
                     .collectList()
                     .map { v2 ->
                         v.addAll(v2)
@@ -79,11 +79,11 @@ class NetworkCase2Service(
                     }
             }.map { v ->
                 mapOf(
-                    "delay100res" to v[0]["totalTimeMillis"],
-                    "delay200res" to v[1]["totalTimeMillis"],
-                    "delay300res" to v[2]["totalTimeMillis"],
-                    "delay400res" to v[3]["totalTimeMillis"],
-                    "delay500res" to v[4]["totalTimeMillis"]
+                    "delay${time1}Res" to v[0]["totalTimeMillis"],
+                    "delay${time2}Res" to v[1]["totalTimeMillis"],
+                    "delay${time1 + time2}Res" to v[2]["totalTimeMillis"],
+                    "delay${time1 + time2 + delta1}Res" to v[3]["totalTimeMillis"],
+                    "delay${time1 + time2 + delta2}Res" to v[4]["totalTimeMillis"]
                 )
             }.toFuture()
 
