@@ -7,10 +7,10 @@ import reactor.core.publisher.Mono
 @Service
 class CpuCase1Service {
 
-    fun flux() =
+    fun flux(round: Int) =
         Mono.just(
             mapOf(
-                "Hello World / 14" to BCrypt.withDefaults().hashToString(14, "Hello World".toCharArray())
+                "Hello World / $round" to BCrypt.withDefaults().hashToString(round, "Hello World".toCharArray())
             )
         )
 }

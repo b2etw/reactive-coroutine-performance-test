@@ -18,18 +18,18 @@ class NetworkCase2Service(
     @Value("\${delay.service.domain}")
     val domain: String = ""
 
-    fun flux() =
-        Flux.mergeSequential(getMonoResponse(100), getMonoResponse(200))
+    fun flux(time1: Long, time2: Long, delta1: Long, delta2: Long) =
+        Flux.mergeSequential(getMonoResponse(time1), getMonoResponse(time2))
             .collectList()
             .flatMap { v ->
-                return@flatMap getMonoResponse(300)
+                return@flatMap getMonoResponse(time1 + time2)
                     .map { v2 ->
                         v.add(v2)
                         return@map v
                     }
             }.flatMap { v ->
                 val period = v[2]["totalTimeMillis"].parseLong()
-                Flux.mergeSequential(getMonoResponse(period + 100), getMonoResponse(period + 200))
+                Flux.mergeSequential(getMonoResponse(period + delta1), getMonoResponse(period + delta2))
                     .collectList()
                     .map { v2 ->
                         v.addAll(v2)
@@ -37,32 +37,32 @@ class NetworkCase2Service(
                     }
             }.map { v ->
                 mapOf(
-                    "delay100res" to v[0]["totalTimeMillis"],
-                    "delay200res" to v[1]["totalTimeMillis"],
-                    "delay300res" to v[2]["totalTimeMillis"],
-                    "delay400res" to v[3]["totalTimeMillis"],
-                    "delay500res" to v[4]["totalTimeMillis"]
+                    "delay${time1}Res" to v[0]["totalTimeMillis"],
+                    "delay${time2}Res" to v[1]["totalTimeMillis"],
+                    "delay${time1 + time2}Res" to v[2]["totalTimeMillis"],
+                    "delay${time1 + time2 + delta1}Res" to v[3]["totalTimeMillis"],
+                    "delay${time1 + time2 + delta2}Res" to v[4]["totalTimeMillis"]
                 )
             }
 
-    suspend fun coroutine() =
+    suspend fun coroutine(time1: Long, time2: Long, delta1: Long, delta2: Long) =
         coroutineScope {
-            val delay100res = async(Dispatchers.IO) { getAwaitResponse(100) }
-            val delay200res = async(Dispatchers.IO) { getAwaitResponse(200) }
+            val delayTime1Res = async(Dispatchers.IO) { getAwaitResponse(time1) }
+            val delayTime2Res = async(Dispatchers.IO) { getAwaitResponse(time2) }
 
-            val period1 = delay100res.await()["totalTimeMillis"]!! + delay200res.await()["totalTimeMillis"]!!
-            val delay300res = async(Dispatchers.IO) { getAwaitResponse(period1) }
+            val period1 = delayTime1Res.await()["totalTimeMillis"]!! + delayTime2Res.await()["totalTimeMillis"]!!
+            val delayTime3Res = async(Dispatchers.IO) { getAwaitResponse(period1) }
 
-            val period2 = delay300res.await()["totalTimeMillis"]!!
-            val delay400res = async(Dispatchers.IO) { getAwaitResponse(period2 + 100) }
-            val delay500res = async(Dispatchers.IO) { getAwaitResponse(period2 + 200) }
+            val period2 = delayTime3Res.await()["totalTimeMillis"]!!
+            val delayTime4Res = async(Dispatchers.IO) { getAwaitResponse(period2 + delta1) }
+            val delayTime5Res = async(Dispatchers.IO) { getAwaitResponse(period2 + delta2) }
 
             mapOf(
-                "delay100res" to delay100res.await()["totalTimeMillis"]!!,
-                "delay200res" to delay200res.await()["totalTimeMillis"]!!,
-                "delay300res" to delay300res.await()["totalTimeMillis"]!!,
-                "delay400res" to delay400res.await()["totalTimeMillis"]!!,
-                "delay500res" to delay500res.await()["totalTimeMillis"]!!
+                "delay${time1}Res" to delayTime1Res.await()["totalTimeMillis"]!!,
+                "delay${time2}Res" to delayTime2Res.await()["totalTimeMillis"]!!,
+                "delay${time1 + time2}Res" to delayTime3Res.await()["totalTimeMillis"]!!,
+                "delay${time1 + time2 + delta1}Res" to delayTime4Res.await()["totalTimeMillis"]!!,
+                "delay${time1 + time2 + delta2}Res" to delayTime5Res.await()["totalTimeMillis"]!!
             )
         }
 

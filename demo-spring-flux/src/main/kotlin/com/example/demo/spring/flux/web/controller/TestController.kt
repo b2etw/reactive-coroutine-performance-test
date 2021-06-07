@@ -5,6 +5,7 @@ import com.example.demo.spring.flux.service.network.NetworkCase1Service
 import com.example.demo.spring.flux.service.network.NetworkCase2Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -16,17 +17,37 @@ class TestController(
 ) {
 
     @GetMapping("/flux/cpu/1")
-    fun fluxCpu1() = cpuCase1Service.flux()
+    fun fluxCpu1(
+        @RequestParam round: Int
+    ) = cpuCase1Service.flux(round)
 
     @GetMapping("/flux/network/1")
-    fun fluxNetwork1() = networkCase1Service.flux()
+    fun fluxNetwork1(
+        @RequestParam time1: Long,
+        @RequestParam time2: Long,
+        @RequestParam time3: Long
+    ) = networkCase1Service.flux(time1, time2, time3)
 
     @GetMapping("/flux/network/2")
-    fun fluxNetwork2() = networkCase2Service.flux()
+    fun fluxNetwork2(
+        @RequestParam time1: Long,
+        @RequestParam time2: Long,
+        @RequestParam delta1: Long,
+        @RequestParam delta2: Long
+    ) = networkCase2Service.flux(time1, time2, delta1, delta2)
 
     @GetMapping("/coroutine/network/1")
-    suspend fun coroutineNetwork1() = networkCase1Service.coroutine()
+    suspend fun coroutineNetwork1(
+        @RequestParam time1: Long,
+        @RequestParam time2: Long,
+        @RequestParam time3: Long
+    ) = networkCase1Service.coroutine(time1, time2, time3)
 
     @GetMapping("/coroutine/network/2")
-    suspend fun coroutineNetwork2() = networkCase2Service.coroutine()
+    suspend fun coroutineNetwork2(
+        @RequestParam time1: Long,
+        @RequestParam time2: Long,
+        @RequestParam delta1: Long,
+        @RequestParam delta2: Long
+    ) = networkCase2Service.coroutine(time1, time2, delta1, delta2)
 }
