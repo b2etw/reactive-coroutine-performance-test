@@ -54,43 +54,52 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         get("/test/ktor/cpu/1") {
+            val round = call.parameters["round"]!!.toInt()
             call.respond(
                 mapOf(
-                    "Hello World / 14" to BCrypt.withDefaults().hashToString(14, "Hello World".toCharArray())
+                    "Hello World / $round" to BCrypt.withDefaults().hashToString(round, "Hello World".toCharArray())
                 )
             )
         }
         get("/test/ktor/network/1") {
-            val delay500res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/500") }
-            val delay800res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/800") }
-            val delay1000res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/1000") }
+            val time1 = call.parameters["time1"]!!.toInt()
+            val time2 = call.parameters["time2"]!!.toInt()
+            val time3 = call.parameters["time3"]!!.toInt()
+            val delayTime1Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time1") }
+            val delayTime2Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time2") }
+            val delayTime3Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time3") }
 
             call.respond(
                 mapOf(
-                    "delay500res" to delay500res.await().totalTimeMillis,
-                    "delay800res" to delay800res.await().totalTimeMillis,
-                    "delay1000res" to delay1000res.await().totalTimeMillis
+                    "delay${time1}Res" to delayTime1Res.await().totalTimeMillis,
+                    "delay${time2}Res" to delayTime2Res.await().totalTimeMillis,
+                    "delay${time3}Res" to delayTime3Res.await().totalTimeMillis
                 )
             )
         }
         get("/test/ktor/network/2") {
-            val delay100res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/100") }
-            val delay200res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/200") }
+            val time1 = call.parameters["time1"]!!.toInt()
+            val time2 = call.parameters["time2"]!!.toInt()
+            val delta1 = call.parameters["delta1"]!!.toInt()
+            val delta2 = call.parameters["delta2"]!!.toInt()
 
-            val peroid1 = delay100res.await().totalTimeMillis + delay200res.await().totalTimeMillis
-            val delay300res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$peroid1") }
+            val delayTime1Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time1") }
+            val delayTime2Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time2") }
 
-            val period2 = delay300res.await().totalTimeMillis
-            val delay400res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + 100}") }
-            val delay500res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + 200}") }
+            val peroid1 = delayTime1Res.await().totalTimeMillis + delayTime2Res.await().totalTimeMillis
+            val delayTime3Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$peroid1") }
+
+            val period2 = delayTime3Res.await().totalTimeMillis
+            val delayTime4Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + delta1}") }
+            val delayTime5Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + delta2}") }
 
             call.respond(
                 mapOf(
-                    "delay100res" to delay100res.await().totalTimeMillis,
-                    "delay200res" to delay200res.await().totalTimeMillis,
-                    "delay300res" to delay300res.await().totalTimeMillis,
-                    "delay400res" to delay400res.await().totalTimeMillis,
-                    "delay500res" to delay500res.await().totalTimeMillis
+                    "delay${time1}Res" to delayTime1Res.await().totalTimeMillis,
+                    "delay${time2}Res" to delayTime2Res.await().totalTimeMillis,
+                    "delay${time1 + time2}Res" to delayTime3Res.await().totalTimeMillis,
+                    "delay${time1 + time2 + delta1}Res" to delayTime4Res.await().totalTimeMillis,
+                    "delay${time1 + time2 + delta2}Res" to delayTime5Res.await().totalTimeMillis
                 )
             )
         }
