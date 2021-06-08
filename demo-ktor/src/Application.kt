@@ -43,7 +43,7 @@ fun Application.module(testing: Boolean = false) {
             serializer = GsonSerializer()
         }
         install(Logging) {
-            level = LogLevel.HEADERS
+            level = LogLevel.NONE
         }
         engine {
             threadsCount = 1000
