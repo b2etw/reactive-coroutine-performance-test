@@ -1,5 +1,6 @@
 package com.example.demo.vertx
 
+import io.vertx.core.DeploymentOptions
 import io.vertx.core.Promise
 import io.vertx.core.Vertx
 import io.vertx.core.VertxOptions
@@ -118,5 +119,9 @@ fun main() {
     )
   )
 
-  vertx.deployVerticle(CoroutineVertxVerticle())
+  vertx.deployVerticle(
+    "com.example.demo.vertx.CoroutineVertxVerticle",
+    DeploymentOptions()
+      .setInstances(DeploymentOptions.DEFAULT_INSTANCES)
+  )
 }
