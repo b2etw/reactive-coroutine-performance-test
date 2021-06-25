@@ -81,7 +81,13 @@ class VertxVerticle : AbstractVerticle() {
         log.info("HTTP server started on port 8080 succeeded: ${it.succeeded()}")
       }
 
-    vertx.deployVerticle(ServiceVerticle(), DeploymentOptions().setWorker(true).setWorkerPoolSize(1000))
+    vertx.deployVerticle(
+      "com.example.demo.vertx.ServiceVerticle",
+      DeploymentOptions()
+        .setInstances(VertxOptions.DEFAULT_EVENT_LOOP_POOL_SIZE)
+        .setWorker(true)
+        .setWorkerPoolSize(1000)
+    )
   }
 }
 
@@ -96,5 +102,9 @@ fun main() {
     )
   )
 
-  vertx.deployVerticle(VertxVerticle())
+  vertx.deployVerticle(
+    "com.example.demo.vertx.VertxVerticle",
+    DeploymentOptions()
+      .setInstances(VertxOptions.DEFAULT_EVENT_LOOP_POOL_SIZE)
+  )
 }
