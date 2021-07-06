@@ -1,8 +1,10 @@
 package com.example.demo.spring.mvc.config
 
+import com.mongodb.reactivestreams.client.MongoClient
 import io.netty.channel.nio.NioEventLoopGroup
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.http.client.reactive.ReactorResourceFactory
 import org.springframework.web.reactive.function.client.WebClient
@@ -13,8 +15,11 @@ import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
+
 @Configuration
-class AppConfig {
+class AppConfig(
+    val mongoClient: MongoClient
+) {
 
     @Bean
     fun webClient() =
@@ -38,4 +43,7 @@ class AppConfig {
                 .clientConnector(it)
                 .build()
         }
+
+    @Bean
+    fun reactiveMongoTemplate() = ReactiveMongoTemplate(mongoClient, "test")
 }
