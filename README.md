@@ -20,6 +20,7 @@
       * [case1](./doc/network/case1/case1.md)
       * [case2](./doc/network/case1/case2.md)
     * Disk
+      * [case1](./doc/disk/case1/case1.md)
 
 # 💫 Principle
 * We're doing performance testing ([ref1](https://www.guru99.com/performance-vs-load-vs-stress-testing.html), [ref2](https://www.blazemeter.com/blog/performance-testing-vs-load-testing-vs-stress-testing))
@@ -33,6 +34,7 @@
 * Docker Compose for managing instances
 
 # 🧨 Testing
+* Apache Benchmark
 * JMeter HTTP requests
 
 # 📊 Metrics
