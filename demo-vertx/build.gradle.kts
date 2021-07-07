@@ -29,13 +29,14 @@ application {
 }
 
 dependencies {
-  implementation("at.favre.lib:bcrypt:0.9.0")
   implementation(platform("io.vertx:vertx-stack-depchain:$vertxVersion"))
   implementation("io.vertx:vertx-web-client")
   implementation("io.vertx:vertx-web")
+  implementation("io.vertx:vertx-mongo-client")
   implementation("io.vertx:vertx-lang-kotlin")
   implementation("io.vertx:vertx-lang-kotlin-coroutines")
   implementation("ch.qos.logback:logback-classic:1.2.3")
+  implementation("at.favre.lib:bcrypt:0.9.0")
   implementation("io.vertx:vertx-micrometer-metrics:4.0.3")
   implementation("io.micrometer:micrometer-registry-prometheus:1.6.5")
   implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")

@@ -5,10 +5,12 @@ import io.vertx.core.Promise
 import io.vertx.core.Vertx
 import io.vertx.core.VertxOptions
 import io.vertx.core.json.JsonObject
+import io.vertx.ext.mongo.MongoClient
 import io.vertx.ext.web.Route
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.client.WebClient
+import io.vertx.kotlin.core.json.jsonObjectOf
 import io.vertx.kotlin.coroutines.CoroutineVerticle
 import io.vertx.kotlin.coroutines.await
 import io.vertx.kotlin.coroutines.dispatcher
@@ -25,6 +27,8 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
   private val log = LoggerFactory.getLogger(this::class.java)
 
   private val delayServiceDomain = System.getenv().getOrDefault("DELAY_SERVICE_DOMAIN", "localhost")
+
+  private lateinit var mongoClient: MongoClient
 
   override fun start(startFuture: Promise<Void>?) {
     val httpServer = vertx.createHttpServer()
@@ -78,6 +82,27 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
       )
     }
 
+    mongoClient = MongoClient.createShared(
+      vertx,
+      jsonObjectOf(
+        "connection_string" to "mongodb://localhost:27017",
+        "authSource" to "admin",
+        "db_name" to "test",
+        "username" to "root",
+        "password" to "rootroot"
+      )
+    )
+
+    router.get("/test/coroutine/disk/1").coroutineHandler { ctx ->
+      val result = mongoClient.save("user", jsonObjectOf("age" to 80)).await()
+      ctx.response().putHeader("Content-Type", "application/json")
+      ctx.response().end(
+        JsonObject()
+          .put("result", result)
+          .encode()
+      )
+    }
+
     router.route("/metrics").handler(PrometheusScrapingHandler.create())
 
     httpServer
@@ -107,6 +132,8 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
       .send()
       .await()
 }
+
+data class User(val id: String?, val age: Int)
 
 fun main() {
   val vertx = Vertx.vertx(
