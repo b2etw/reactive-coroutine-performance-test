@@ -1,0 +1,32 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "delay-service"
+    scrape_interval: 5s
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["139.196.79.107:8888"]
+  - job_name: "test-spring-mvc"
+    scrape_interval: 5s
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["106.14.199.135:8080"]
+#  - job_name: "delay-spring-flux"
+#    scrape_interval: 5s
+#    metrics_path: /actuator/prometheus
+#    static_configs:
+#      - targets: ["101.132.179.9:8080"]
+#  - job_name: "test-vertx"
+#    scrape_interval: 5s
+#    static_configs:
+#      - targets: [ "47.100.106.129:8080" ]
+#  - job_name: "test-vertx-coroutine"
+#    scrape_interval: 5s
+#    static_configs:
+#      - targets: [ "47.100.20.106:8080" ]
+#  - job_name: "test-ktor"
+#    scrape_interval: 5s
+#    static_configs:
+#      - targets: [ "47.100.117.99:8080" ]

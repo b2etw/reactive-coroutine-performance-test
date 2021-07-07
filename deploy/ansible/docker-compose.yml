@@ -1,0 +1,100 @@
+version: '3'
+
+services:
+  delay-service:
+    image: registry.hub.docker.com/taiwanbackendgroup/demo-delay-service:1.0.0
+    environment:
+      - TZ=Asia/Taipei
+    expose:
+      - 8888
+    ports:
+      - "8888:8888"
+    networks:
+      - default
+
+  spring-mvc:
+    image: registry.hub.docker.com/taiwanbackendgroup/demo-spring-mvc:1.0.0
+    environment:
+      - TZ=Asia/Taipei
+      - DELAY_SERVICE_DOMAIN=192.168.1.163
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+
+  spring-flux:
+    image: registry.hub.docker.com/taiwanbackendgroup/demo-spring-flux:1.0.0
+    environment:
+      - TZ=Asia/Taipei
+      - DELAY_SERVICE_DOMAIN=192.168.1.163
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+
+  vertx:
+    image: taiwanbackendgroup/demo-vertx:1.0.0
+    environment:
+      - TZ=Asia/Taipei
+      - DELAY_SERVICE_DOMAIN=192.168.1.163
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+
+  vertx-coroutine:
+    image: registry.hub.docker.com/taiwanbackendgroup/demo-vertx-coroutine:1.0.0
+    environment:
+      - TZ=Asia/Taipei
+      - DELAY_SERVICE_DOMAIN=192.168.1.163
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+
+  ktor:
+    image: registry.hub.docker.com/taiwanbackendgroup/demo-ktor:1.0.0
+    environment:
+      - TZ=Asia/Taipei
+      - DELAY_SERVICE_DOMAIN=192.168.1.163
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - default
+
+  mongo:
+    image: mongo
+    restart: always
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: test
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootroot
+    networks:
+      - default
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    networks:
+      - default
+
+networks:
+  default:

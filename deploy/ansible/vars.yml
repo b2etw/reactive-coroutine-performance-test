@@ -1,0 +1,13 @@
+requried_packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
+#  - openjdk-11-jdk
+
+docker_engines:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-compose
