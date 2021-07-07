@@ -2,11 +2,9 @@ package com.example.demo.spring.flux.web.controller
 
 import com.example.demo.spring.flux.service.cpu.CpuCase1Service
 import com.example.demo.spring.flux.service.disk.DiskCase1Service
-import com.example.demo.spring.flux.service.disk.User
 import com.example.demo.spring.flux.service.network.NetworkCase1Service
 import com.example.demo.spring.flux.service.network.NetworkCase2Service
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -40,7 +38,7 @@ class TestController(
         @RequestParam delta2: Long
     ) = networkCase2Service.flux(time1, time2, delta1, delta2)
 
-    @PostMapping("/flux/disk/1")
+    @GetMapping("/flux/disk/1")
     fun fluxDisk1() = diskCase1Service.flux()
 
     @GetMapping("/coroutine/network/1")
@@ -58,6 +56,6 @@ class TestController(
         @RequestParam delta2: Long
     ) = networkCase2Service.coroutine(time1, time2, delta1, delta2)
 
-    @PostMapping("/coroutine/disk/1")
+    @GetMapping("/coroutine/disk/1")
     suspend fun coroutineDisk1() = diskCase1Service.coroutine()
 }

@@ -5,7 +5,6 @@ import com.example.demo.spring.mvc.service.disk.DiskCase1Service
 import com.example.demo.spring.mvc.service.network.NetworkCase1Service
 import com.example.demo.spring.mvc.service.network.NetworkCase2Service
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -37,7 +36,7 @@ class TestController(
         @RequestParam delta2: Long
     ) = networkCase2Service.mvc(time1, time2, delta1, delta2)
 
-    @PostMapping("/mvc/disk/1")
+    @GetMapping("/mvc/disk/1")
     fun mvcDisk1() = diskCase1Service.mvc()
 
     @GetMapping("/async/network/1")
@@ -55,6 +54,6 @@ class TestController(
         @RequestParam delta2: Long
     ) = networkCase2Service.async(time1, time2, delta1, delta2)
 
-    @PostMapping("/async/disk/1")
+    @GetMapping("/async/disk/1")
     fun asyncDisk1() = diskCase1Service.async()
 }

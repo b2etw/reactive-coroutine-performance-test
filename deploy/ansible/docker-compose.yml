@@ -5,8 +5,6 @@ services:
     image: registry.hub.docker.com/taiwanbackendgroup/demo-delay-service:1.0.0
     environment:
       - TZ=Asia/Taipei
-    expose:
-      - 8888
     ports:
       - "8888:8888"
     networks:
@@ -57,10 +55,19 @@ services:
     environment:
       - TZ=Asia/Taipei
       - DELAY_SERVICE_DOMAIN=192.168.1.163
-    expose:
-      - 8080
     ports:
       - "8080:8080"
+    networks:
+      - default
+
+  mongodb:
+    image: mongo:bionic
+    environment:
+      - MONGO_INITDB_DATABASE=test
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootroot
+    ports:
+        - 27017:27017
     networks:
       - default
 
@@ -70,20 +77,6 @@ services:
       - 9090:9090
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - default
-
-  mongo:
-    image: mongo
-    restart: always
-    expose:
-      - 27017
-    ports:
-      - 27017:27017
-    environment:
-      MONGO_INITDB_DATABASE: test
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootroot
     networks:
       - default
 
