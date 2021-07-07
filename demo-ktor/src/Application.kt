@@ -1,4 +1,4 @@
-package com.example
+package tw.b2e
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -65,9 +65,12 @@ fun Application.module(testing: Boolean = false) {
             val time1 = call.parameters["time1"]!!.toInt()
             val time2 = call.parameters["time2"]!!.toInt()
             val time3 = call.parameters["time3"]!!.toInt()
-            val delayTime1Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time1") }
-            val delayTime2Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time2") }
-            val delayTime3Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time3") }
+            val delayTime1Res =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time1") }
+            val delayTime2Res =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time2") }
+            val delayTime3Res =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time3") }
 
             call.respond(
                 mapOf(
@@ -83,15 +86,20 @@ fun Application.module(testing: Boolean = false) {
             val delta1 = call.parameters["delta1"]!!.toInt()
             val delta2 = call.parameters["delta2"]!!.toInt()
 
-            val delayTime1Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time1") }
-            val delayTime2Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time2") }
+            val delayTime1Res =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time1") }
+            val delayTime2Res =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$time2") }
 
             val peroid1 = delayTime1Res.await().totalTimeMillis + delayTime2Res.await().totalTimeMillis
-            val delayTime3Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$peroid1") }
+            val delayTime3Res =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/$peroid1") }
 
             val period2 = delayTime3Res.await().totalTimeMillis
-            val delayTime4Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + delta1}") }
-            val delayTime5Res = async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + delta2}") }
+            val delayTime4Res =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + delta1}") }
+            val delayTime5Res =
+                async(Dispatchers.IO) { client.get<DelayResponse>("http://$delayServiceDomain:8888/delay/ms/${period2 + delta2}") }
 
             call.respond(
                 mapOf(
