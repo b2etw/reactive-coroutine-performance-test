@@ -73,6 +73,21 @@ class VertxVerticle : AbstractVerticle() {
       }
     }
 
+    router.get("/test/vertx/disk/1").handler { ctx ->
+      vertx.eventBus().request<JsonObject>(
+        "test.vertx.disk.1",
+        JsonObject()
+      ).onComplete { reply ->
+        if (reply.succeeded()) {
+          ctx.response().putHeader("Content-Type", "application/json")
+          ctx.response().end(reply.result().body().encode())
+        } else {
+          log.error(reply.cause().message, reply.cause())
+          ctx.response().setStatusCode(500).end(reply.cause().message)
+        }
+      }
+    }
+
     router.route("/metrics").handler(PrometheusScrapingHandler.create())
 
     httpServer

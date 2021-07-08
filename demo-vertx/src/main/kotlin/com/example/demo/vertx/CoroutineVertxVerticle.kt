@@ -5,7 +5,9 @@ import io.vertx.core.Promise
 import io.vertx.core.Vertx
 import io.vertx.core.VertxOptions
 import io.vertx.core.json.JsonObject
+import io.vertx.ext.mongo.FindOptions
 import io.vertx.ext.mongo.MongoClient
+import io.vertx.ext.mongo.UpdateOptions
 import io.vertx.ext.web.Route
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
@@ -21,6 +23,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class CoroutineVertxVerticle : CoroutineVerticle() {
 
@@ -29,6 +34,8 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
   private val delayServiceDomain = System.getenv().getOrDefault("DELAY_SERVICE_DOMAIN", "localhost")
 
   private lateinit var mongoClient: MongoClient
+
+  private val df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm'Z'")
 
   override fun start(startFuture: Promise<Void>?) {
     val httpServer = vertx.createHttpServer()
@@ -94,7 +101,16 @@ class CoroutineVertxVerticle : CoroutineVerticle() {
     )
 
     router.get("/test/coroutine/disk/1").coroutineHandler { ctx ->
-      val result = mongoClient.save("user", jsonObjectOf("age" to 80)).await()
+      val result = mongoClient.findOneAndUpdateWithOptions(
+        "demo-vertx-coroutine",
+        jsonObjectOf(
+          "date" to jsonObjectOf("\$date" to df.format(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS)))
+        ),
+        jsonObjectOf("\$inc" to jsonObjectOf("count" to 1L)),
+        FindOptions(),
+        UpdateOptions().setUpsert(true).setReturningNewDocument(true)
+      ).await()
+
       ctx.response().putHeader("Content-Type", "application/json")
       ctx.response().end(
         JsonObject()
@@ -149,6 +165,6 @@ fun main() {
   vertx.deployVerticle(
     "com.example.demo.vertx.CoroutineVertxVerticle",
     DeploymentOptions()
-      .setInstances(DeploymentOptions.DEFAULT_INSTANCES)
+      .setInstances(VertxOptions.DEFAULT_EVENT_LOOP_POOL_SIZE)
   )
 }
