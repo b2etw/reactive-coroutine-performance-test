@@ -3,12 +3,15 @@
 * Comparing its performance on CPU, Network IO and Disk IO intensive cases.
 
 # 🎯 Target
-* Spring MVC
-* Spring MVC Async
-* Spring WebFlux
-* Spring WebFlux Coroutine
+* Spring Web
+  * Spring MVC
+  * Spring MVC Async
+* Spring Reactive Web
+  * Spring WebFlux
+  * Spring WebFlux Coroutine
 * Vert.x
-* Vert.x Coroutine
+  * Verticle
+  * Coroutine Verticle
 * Ktor
 
 # 📄 Cases
