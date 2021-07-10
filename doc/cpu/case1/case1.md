@@ -8,7 +8,7 @@
 * ab -n 100 -c 10
 
 # Procedure
-* Warm twice and hit three times
+* warm twice and hit three times
 * mark the best one if we can
 
 # Spring Web
