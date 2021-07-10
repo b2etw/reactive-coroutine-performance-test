@@ -5,6 +5,7 @@
 
 # Context
 * jmeter use constant throughput timer to keep 15 RPS
+* ab -n 100 -c 10
 
 # Procedure
 * Warm twice and hit three times
