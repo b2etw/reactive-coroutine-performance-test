@@ -21,6 +21,7 @@ import java.time.temporal.ChronoUnit
 class ServiceVerticle : AbstractVerticle() {
 
   private val delayServiceDomain = System.getenv().getOrDefault("DELAY_SERVICE_DOMAIN", "localhost")
+  private val mongoDbDomain = System.getenv().getOrDefault("MONGODB_DOMAIN", "localhost")
 
   private lateinit var mongoClient: MongoClient
 
@@ -95,7 +96,7 @@ class ServiceVerticle : AbstractVerticle() {
     mongoClient = MongoClient.createShared(
       vertx,
       jsonObjectOf(
-        "connection_string" to "mongodb://localhost:27017",
+        "connection_string" to "mongodb://${mongoDbDomain}:27017",
         "authSource" to "admin",
         "db_name" to "test",
         "username" to "root",

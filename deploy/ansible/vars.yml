@@ -4,6 +4,7 @@ requried_packages:
   - curl
   - gnupg-agent
   - software-properties-common
+  - apache2-utils
 #  - openjdk-11-jdk
 
 docker_engines:
