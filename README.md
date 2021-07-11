@@ -17,13 +17,13 @@
 # 📄 Cases
 * Variable
   * CPU
-    * [case1](./doc/cpu/case1/case1.md)
+    * [case1](./docs/cpu/case1/case1.md)
   * IO
     * Network
-      * [case1](./doc/network/case1/case1.md)
-      * [case2](./doc/network/case1/case2.md)
+      * [case1](./docs/network/case1/case1.md)
+      * [case2](./docs/network/case1/case2.md)
     * Disk
-      * [case1](./doc/disk/case1/case1.md)
+      * [case1](./docs/disk/case1/case1.md)
 
 # 💫 Principle
 * We're doing performance testing ([ref1](https://www.guru99.com/performance-vs-load-vs-stress-testing.html), [ref2](https://www.blazemeter.com/blog/performance-testing-vs-load-testing-vs-stress-testing))
@@ -34,10 +34,9 @@
 # 🧱 Deployment
 * Terraform for managing VM
 * Ansible for setting VM
-* Docker Compose for managing instances
+* Docker Compose for managing servers
 
 # 🧨 Testing
-* Apache Benchmark
 * JMeter HTTP requests
 
 # 📊 Metrics
