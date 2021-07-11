@@ -32,7 +32,7 @@ provider "aws" {
 //               佛祖保佑         永无BUG
 variable "system_prefix" { default = "reactive-coroutine-performance-test" }
 variable "environment" { default = "dev" }
-variable "number_of_master_instances" { default = 1 }
+variable "number_of_master_instances" { default = 8 }
 variable "master_instance_type" { default = "t2.xlarge" }
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -77,6 +77,12 @@ module "security_group" {
         {
           from_port   = 22
           to_port     = 22
+          protocol    = "tcp"
+          cidr_blocks = "0.0.0.0/0"
+        },
+        {
+          from_port   = 3000
+          to_port     = 3000
           protocol    = "tcp"
           cidr_blocks = "0.0.0.0/0"
         },
@@ -133,6 +139,10 @@ module "ec2_cluster_master" {
   }
 }
 
-output "master_ips" {
+output "master_public_ips" {
   value = module.ec2_cluster_master.public_ip
+}
+
+output "master_private_ips" {
+  value = module.ec2_cluster_master.private_ip
 }

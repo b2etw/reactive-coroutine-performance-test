@@ -7,26 +7,26 @@ scrape_configs:
     scrape_interval: 5s
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["139.196.79.107:8888"]
-  - job_name: "test-spring-mvc"
+      - targets: ["192.168.101.92:8888"]
+  - job_name: "spring-mvc"
     scrape_interval: 5s
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["106.14.199.135:8080"]
-#  - job_name: "delay-spring-flux"
-#    scrape_interval: 5s
-#    metrics_path: /actuator/prometheus
-#    static_configs:
-#      - targets: ["101.132.179.9:8080"]
-#  - job_name: "test-vertx"
-#    scrape_interval: 5s
-#    static_configs:
-#      - targets: [ "47.100.106.129:8080" ]
-#  - job_name: "test-vertx-coroutine"
-#    scrape_interval: 5s
-#    static_configs:
-#      - targets: [ "47.100.20.106:8080" ]
-#  - job_name: "test-ktor"
-#    scrape_interval: 5s
-#    static_configs:
-#      - targets: [ "47.100.117.99:8080" ]
+      - targets: ["192.168.101.239:8080"]
+  - job_name: "delay-spring-flux"
+    scrape_interval: 5s
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["192.168.101.140:8080"]
+  - job_name: "vertx"
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ "192.168.101.27:8080" ]
+  - job_name: "vertx-coroutine"
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ "192.168.101.210:8080" ]
+  - job_name: "ktor"
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ "192.168.101.114:8080" ]

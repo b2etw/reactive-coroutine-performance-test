@@ -1,0 +1,34 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 6010,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 365.0559068219626,
+    "medianResTime" : 353.0,
+    "minResTime" : 249.0,
+    "maxResTime" : 826.0,
+    "pct1ResTime" : 482.0,
+    "pct2ResTime" : 514.0,
+    "pct3ResTime" : 603.8900000000003,
+    "throughput" : 20.002462865644024,
+    "receivedKBytesPerSec" : 3.008182891903495,
+    "sentKBytesPerSec" : 3.437923305032566
+  },
+  "cpu/1/spring/flux" : {
+    "transaction" : "cpu/1/spring/flux",
+    "sampleCount" : 6010,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 365.0559068219626,
+    "medianResTime" : 353.0,
+    "minResTime" : 249.0,
+    "maxResTime" : 826.0,
+    "pct1ResTime" : 482.0,
+    "pct2ResTime" : 514.0,
+    "pct3ResTime" : 603.8900000000003,
+    "throughput" : 20.002462865644024,
+    "receivedKBytesPerSec" : 3.008182891903495,
+    "sentKBytesPerSec" : 3.437923305032566
+  }
+}

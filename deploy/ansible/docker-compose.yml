@@ -14,8 +14,8 @@ services:
     image: registry.hub.docker.com/taiwanbackendgroup/demo-spring-mvc:1.0.0
     environment:
       - TZ=Asia/Taipei
-      - DELAY_SERVICE_DOMAIN=192.168.1.174
-      - MONGODB_DOMAIN=192.168.1.174
+      - DELAY_SERVICE_DOMAIN=192.168.101.92
+      - MONGODB_DOMAIN=192.168.101.207
     ports:
       - "8080:8080"
     networks:
@@ -25,8 +25,8 @@ services:
     image: registry.hub.docker.com/taiwanbackendgroup/demo-spring-flux:1.0.0
     environment:
       - TZ=Asia/Taipei
-      - DELAY_SERVICE_DOMAIN=192.168.1.174
-      - MONGODB_DOMAIN=192.168.1.174
+      - DELAY_SERVICE_DOMAIN=192.168.101.92
+      - MONGODB_DOMAIN=192.168.101.207
     ports:
       - "8080:8080"
     networks:
@@ -36,8 +36,8 @@ services:
     image: taiwanbackendgroup/demo-vertx:1.0.0
     environment:
       - TZ=Asia/Taipei
-      - DELAY_SERVICE_DOMAIN=192.168.1.174
-      - MONGODB_DOMAIN=192.168.1.174
+      - DELAY_SERVICE_DOMAIN=192.168.101.92
+      - MONGODB_DOMAIN=192.168.101.207
     ports:
       - "8080:8080"
     networks:
@@ -47,8 +47,8 @@ services:
     image: registry.hub.docker.com/taiwanbackendgroup/demo-vertx-coroutine:1.0.0
     environment:
       - TZ=Asia/Taipei
-      - DELAY_SERVICE_DOMAIN=192.168.1.174
-      - MONGODB_DOMAIN=192.168.1.174
+      - DELAY_SERVICE_DOMAIN=192.168.101.92
+      - MONGODB_DOMAIN=192.168.101.207
     ports:
       - "8080:8080"
     networks:
@@ -58,7 +58,7 @@ services:
     image: registry.hub.docker.com/taiwanbackendgroup/demo-ktor:1.0.0
     environment:
       - TZ=Asia/Taipei
-      - DELAY_SERVICE_DOMAIN=192.168.1.174
+      - DELAY_SERVICE_DOMAIN=192.168.101.92
     ports:
       - "8080:8080"
     networks:
