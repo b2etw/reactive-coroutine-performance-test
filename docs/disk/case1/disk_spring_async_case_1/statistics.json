@@ -1,0 +1,34 @@
+{
+  "disk/1/spring/async" : {
+    "transaction" : "disk/1/spring/async",
+    "sampleCount" : 6043,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 2.206188978983944,
+    "medianResTime" : 2.0,
+    "minResTime" : 1.0,
+    "maxResTime" : 49.0,
+    "pct1ResTime" : 3.0,
+    "pct2ResTime" : 3.0,
+    "pct3ResTime" : 3.0,
+    "throughput" : 50.3990725836718,
+    "receivedKBytesPerSec" : 14.58546341886775,
+    "sentKBytesPerSec" : 8.465469223038623
+  },
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 6043,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 2.206188978983944,
+    "medianResTime" : 2.0,
+    "minResTime" : 1.0,
+    "maxResTime" : 49.0,
+    "pct1ResTime" : 3.0,
+    "pct2ResTime" : 3.0,
+    "pct3ResTime" : 3.0,
+    "throughput" : 50.3990725836718,
+    "receivedKBytesPerSec" : 14.58546341886775,
+    "sentKBytesPerSec" : 8.465469223038623
+  }
+}
