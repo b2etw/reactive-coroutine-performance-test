@@ -1,0 +1,34 @@
+{
+  "network/1/spring/flux" : {
+    "transaction" : "network/1/spring/flux",
+    "sampleCount" : 5909,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 1002.7219495684528,
+    "medianResTime" : 1003.0,
+    "minResTime" : 1002.0,
+    "maxResTime" : 1040.0,
+    "pct1ResTime" : 1003.0,
+    "pct2ResTime" : 1004.0,
+    "pct3ResTime" : 1004.0,
+    "throughput" : 19.638797676180854,
+    "receivedKBytesPerSec" : 2.4548497095226067,
+    "sentKBytesPerSec" : 3.912416724551654
+  },
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 5909,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 1002.7219495684528,
+    "medianResTime" : 1003.0,
+    "minResTime" : 1002.0,
+    "maxResTime" : 1040.0,
+    "pct1ResTime" : 1003.0,
+    "pct2ResTime" : 1004.0,
+    "pct3ResTime" : 1004.0,
+    "throughput" : 19.638797676180854,
+    "receivedKBytesPerSec" : 2.4548497095226067,
+    "sentKBytesPerSec" : 3.912416724551654
+  }
+}

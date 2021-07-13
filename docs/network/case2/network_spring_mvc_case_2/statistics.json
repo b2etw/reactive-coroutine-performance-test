@@ -1,0 +1,34 @@
+{
+  "network/2/spring/mvc" : {
+    "transaction" : "network/2/spring/mvc",
+    "sampleCount" : 3194,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 4498.09893550407,
+    "medianResTime" : 4713.0,
+    "minResTime" : 1005.0,
+    "maxResTime" : 4915.0,
+    "pct1ResTime" : 4804.0,
+    "pct2ResTime" : 4814.0,
+    "pct3ResTime" : 4818.0,
+    "throughput" : 10.521946527164676,
+    "receivedKBytesPerSec" : 2.7126893390346427,
+    "sentKBytesPerSec" : 2.2091977571683645
+  },
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 3194,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 4498.09893550407,
+    "medianResTime" : 4713.0,
+    "minResTime" : 1005.0,
+    "maxResTime" : 4915.0,
+    "pct1ResTime" : 4804.0,
+    "pct2ResTime" : 4814.0,
+    "pct3ResTime" : 4818.0,
+    "throughput" : 10.521946527164676,
+    "receivedKBytesPerSec" : 2.7126893390346427,
+    "sentKBytesPerSec" : 2.2091977571683645
+  }
+}

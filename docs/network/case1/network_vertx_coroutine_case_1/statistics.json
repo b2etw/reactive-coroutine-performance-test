@@ -1,0 +1,34 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 5909,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 1002.8722288035185,
+    "medianResTime" : 1003.0,
+    "minResTime" : 1002.0,
+    "maxResTime" : 1039.0,
+    "pct1ResTime" : 1003.0,
+    "pct2ResTime" : 1004.0,
+    "pct3ResTime" : 1004.0,
+    "throughput" : 19.63899348912028,
+    "receivedKBytesPerSec" : 2.4548741861400356,
+    "sentKBytesPerSec" : 4.008349257056777
+  },
+  "network/1/vertx/coroutine" : {
+    "transaction" : "network/1/vertx/coroutine",
+    "sampleCount" : 5909,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 1002.8722288035185,
+    "medianResTime" : 1003.0,
+    "minResTime" : 1002.0,
+    "maxResTime" : 1039.0,
+    "pct1ResTime" : 1003.0,
+    "pct2ResTime" : 1004.0,
+    "pct3ResTime" : 1004.0,
+    "throughput" : 19.63899348912028,
+    "receivedKBytesPerSec" : 2.4548741861400356,
+    "sentKBytesPerSec" : 4.008349257056777
+  }
+}

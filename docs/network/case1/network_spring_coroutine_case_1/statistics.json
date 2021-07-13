@@ -1,0 +1,34 @@
+{
+  "network/1/spring/coroutine" : {
+    "transaction" : "network/1/spring/coroutine",
+    "sampleCount" : 5909,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 1002.8788289050607,
+    "medianResTime" : 1003.0,
+    "minResTime" : 1002.0,
+    "maxResTime" : 1120.0,
+    "pct1ResTime" : 1004.0,
+    "pct2ResTime" : 1004.0,
+    "pct3ResTime" : 1004.8999999999996,
+    "throughput" : 19.63931985269679,
+    "receivedKBytesPerSec" : 2.454914981587099,
+    "sentKBytesPerSec" : 4.008415868372685
+  },
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 5909,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 1002.8788289050607,
+    "medianResTime" : 1003.0,
+    "minResTime" : 1002.0,
+    "maxResTime" : 1120.0,
+    "pct1ResTime" : 1004.0,
+    "pct2ResTime" : 1004.0,
+    "pct3ResTime" : 1004.8999999999996,
+    "throughput" : 19.63931985269679,
+    "receivedKBytesPerSec" : 2.454914981587099,
+    "sentKBytesPerSec" : 4.008415868372685
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "Total" : {
+    "transaction" : "Total",
+    "sampleCount" : 5908,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 1004.2044685172624,
+    "medianResTime" : 1004.0,
+    "minResTime" : 1002.0,
+    "maxResTime" : 1353.0,
+    "pct1ResTime" : 1005.0,
+    "pct2ResTime" : 1010.0,
+    "pct3ResTime" : 1012.0,
+    "throughput" : 19.63547413621196,
+    "receivedKBytesPerSec" : 3.8734040776511875,
+    "sentKBytesPerSec" : 3.930929880784621
+  },
+  "network/1/ktor/ktor" : {
+    "transaction" : "network/1/ktor/ktor",
+    "sampleCount" : 5908,
+    "errorCount" : 0,
+    "errorPct" : 0.0,
+    "meanResTime" : 1004.2044685172624,
+    "medianResTime" : 1004.0,
+    "minResTime" : 1002.0,
+    "maxResTime" : 1353.0,
+    "pct1ResTime" : 1005.0,
+    "pct2ResTime" : 1010.0,
+    "pct3ResTime" : 1012.0,
+    "throughput" : 19.63547413621196,
+    "receivedKBytesPerSec" : 3.8734040776511875,
+    "sentKBytesPerSec" : 3.930929880784621
+  }
+}
