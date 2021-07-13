@@ -136,12 +136,12 @@ $(document).ready(function() {
     var data = {"OkPercent": 100.0, "KoPercent": 0.0};
     var dataset = [
         {
-            "label" : "KO",
+            "label" : "FAIL",
             "data" : data.KoPercent,
             "color" : "#FF6347"
         },
         {
-            "label" : "OK",
+            "label" : "PASS",
             "data" : data.OkPercent,
             "color" : "#9ACD32"
         }];
@@ -173,7 +173,7 @@ $(document).ready(function() {
     });
 
     // Creates APDEX table
-    createTable($("#apdexTable"), {"supportsControllersDiscrimination": true, "overall": {"data": [0.9730404393409885, 500, 1500, "Total"], "isController": false}, "titles": ["Apdex", "T (Toleration threshold)", "F (Frustration threshold)", "Label"], "items": [{"data": [0.9730404393409885, 500, 1500, "cpu\/1\/vertx\/vertx"], "isController": false}]}, function(index, item){
+    createTable($("#apdexTable"), {"supportsControllersDiscrimination": true, "overall": {"data": [0.9813060817547358, 500, 1500, "Total"], "isController": false}, "titles": ["Apdex", "T (Toleration threshold)", "F (Frustration threshold)", "Label"], "items": [{"data": [0.9813060817547358, 500, 1500, "cpu/1/spring/flux"], "isController": false}]}, function(index, item){
         switch(index){
             case 0:
                 item = item.toFixed(3);
@@ -187,7 +187,7 @@ $(document).ready(function() {
     }, [[0, 0]], 3);
 
     // Create statistics table
-    createTable($("#statisticsTable"), {"supportsControllersDiscrimination": true, "overall": {"data": ["Total", 6009, 0, 0.0, 345.51788983191983, 251, 708, 329.0, 461.0, 504.0, 562.0, 19.999667171456625, 3.007762445707344, 3.496035570010484], "isController": false}, "titles": ["Label", "#Samples", "KO", "Error %", "Average", "Min", "Max", "Median", "90th pct", "95th pct", "99th pct", "Transactions\/s", "Received", "Sent"], "items": [{"data": ["cpu\/1\/vertx\/vertx", 6009, 0, 0.0, 345.51788983191983, 251, 708, 329.0, 461.0, 504.0, 562.0, 19.999667171456625, 3.007762445707344, 3.496035570010484], "isController": false}]}, function(index, item){
+    createTable($("#statisticsTable"), {"supportsControllersDiscrimination": true, "overall": {"data": ["Total", 6018, 0, 0.0, 327.85510136257886, 183, 683, 332.0, 458.0, 489.0, 556.0, 20.043430763901842, 3.0143440797274255, 3.484111988256375], "isController": false}, "titles": ["Label", "#Samples", "FAIL", "Error %", "Average", "Min", "Max", "Median", "90th pct", "95th pct", "99th pct", "Transactions/s", "Received", "Sent"], "items": [{"data": ["cpu/1/spring/flux", 6018, 0, 0.0, 327.85510136257886, 183, 683, 332.0, 458.0, 489.0, 556.0, 20.043430763901842, 3.0143440797274255, 3.484111988256375], "isController": false}]}, function(index, item){
         switch(index){
             // Errors pct
             case 3:
@@ -228,7 +228,7 @@ $(document).ready(function() {
     }, [[1, 1]]);
 
         // Create top5 errors by sampler
-    createTable($("#top5ErrorsBySamplerTable"), {"supportsControllersDiscrimination": false, "overall": {"data": ["Total", 6009, 0, null, null, null, null, null, null, null, null, null, null], "isController": false}, "titles": ["Sample", "#Samples", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors"], "items": [{"data": [], "isController": false}]}, function(index, item){
+    createTable($("#top5ErrorsBySamplerTable"), {"supportsControllersDiscrimination": false, "overall": {"data": ["Total", 6018, 0, null, null, null, null, null, null, null, null, null, null], "isController": false}, "titles": ["Sample", "#Samples", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors", "Error", "#Errors"], "items": [{"data": [], "isController": false}]}, function(index, item){
         return item;
     }, [[0, 0]], 0);
 
