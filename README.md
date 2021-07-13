@@ -25,12 +25,6 @@
     * Disk
       * [case1](./docs/disk/case1/case1.md)
 
-# 💫 Principle
-* We're doing performance testing ([ref1](https://www.guru99.com/performance-vs-load-vs-stress-testing.html), [ref2](https://www.blazemeter.com/blog/performance-testing-vs-load-testing-vs-stress-testing))
-  * use proper RPS and review the metrics
-* We're not finding the best solution
-  * use proper coding style and consider other factors
-
 # 🧱 Deployment
 * Terraform for managing VM
 * Ansible for setting VM
