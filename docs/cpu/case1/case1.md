@@ -6,7 +6,7 @@
 * AWS t2.xlarge (4core 16g) -> Docker, Spring Reactive Web
 * AWS t2.xlarge (4core 16g) -> Docker, Vert.x
 * AWS t2.xlarge (4core 16g) -> Docker, Ktor
-* AWS t2.2xlarge (8core 32g)
+* AWS t2.2xlarge (8core 32g) -> openjdk-11-jdk, Apache-JMeter-5.4.1)
 
 # Context
 * jmeter use constant throughput timer to keep **20 RPS**

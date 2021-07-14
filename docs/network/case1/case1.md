@@ -8,7 +8,7 @@
 * AWS t2.xlarge (4core 16g) -> Docker, Vert.x Verticle
 * AWS t2.xlarge (4core 16g) -> Docker, Vert.x Coroutine Verticle
 * AWS t2.xlarge (4core 16g) -> Docker, Ktor
-* AWS t2.2xlarge (8core 32g)
+* AWS t2.2xlarge (8core 32g) -> openjdk-11-jdk, Apache-JMeter-5.4.1
 
 # Context
 * target server receive request and invokes /delay/ms/500, /delay/ms/800, /delay/ms/1000 endpoints concurrently then return
