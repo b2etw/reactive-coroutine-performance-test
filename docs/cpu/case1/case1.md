@@ -1,4 +1,4 @@
-# Case 1, CPU
+# CPU, Case 1
 * process bcrypt hashing with **cost factor 11**
 
 # Environment

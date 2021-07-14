@@ -1,8 +1,9 @@
-# Case 1, Network IO
+# Network IO, Case 1
 * build a delay service which will return {time} ms with /delay/ms/{time} endpoint
 * the target server will invoke delay endpoint and return
 
 # Environment
+* AWS t2.xlarge (4core 16g) -> Docker, Spring Web (Delay Service)
 * AWS t2.xlarge (4core 16g) -> Docker, Spring Web, Spring Web Async
 * AWS t2.xlarge (4core 16g) -> Docker, Spring Reactive Web, Spring Reactive Web Coroutine
 * AWS t2.xlarge (4core 16g) -> Docker, Vert.x Verticle
@@ -55,15 +56,9 @@ ktor {
 * Warm twice and hit one once
 
 # [Spring Web](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_mvc_case_1/index.html)
-
 # [Spring Web Async](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_async_case_1/index.html)
-
 # [Spring Reactive Web](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_flux_case_1/index.html)
-
 # [Spring Reactive Web Coroutine](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_coroutine_case_1/index.html)
-
 # [Vert.x](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_vertx_vertx_case_1/index.html)
-
 # [Vert.x Coroutine](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_vertx_coroutine_case_1/index.html)
-
 # [Ktor](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_ktor_ktor_case_1/index.html)

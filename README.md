@@ -21,9 +21,10 @@
   * IO
     * Network
       * [case1](./docs/network/case1/case1.md)
-      * [case2](./docs/network/case1/case2.md)
+      * [case2](./docs/network/case2/case2.md)
     * Disk
-      * [case1](./docs/disk/case1/case1.md)
+      * [case1](docs/disk/case1/case1.md)
+      * [case2](docs/disk/case2/case2.md)
 
 # 🧱 Deployment
 * Terraform for managing VM

@@ -1,56 +1,42 @@
-# Case 1, Network IO
-* build a delay service which will return {time} ms with /mock/delay/{time} endpoint
-* the target server will invoke delay endpoint and return
+# Disk IO, Case 1
+* do mongodb upsert action
 
-# Environment, ecs.g6.xlarge(4core, 16g)
-* all services deploy on aliyun ecs.g6.xlarge machine
+# Environment
+* service： linode 1core 2G 
+  * mongoDB on same instance
+* Gating： linode 2core 4GB
 
 # Context
-* target server receive request and invoke /mock/delay/1 endpoint then return
-* jmeter use constant throughput timer to keep 15 RPS
-* for demo-mock
-  * server.tomcat.threads.max=800 
-* for demo-spring-mvc
-  * server.tomcat.threads.max=800
-* for demo-spring-flux
-  * -Dreactor.netty.ioWorkerCount=1000
-  * -Dreactor.netty.pool.maxConnections=8192
+* https://github.com/guyspy/reactive-load-test
+* Stress Test
+```
+scn.inject(
+  nothingFor(5 seconds),
+  rampUsersPerSec(1) to (1200) during (2 minutes)
+)
+```
+* Load Test
+```
+setUp(
+  scn.inject(
+    constantConcurrentUsers(2000) during (10 seconds),
+    constantConcurrentUsers(4000) during (10 seconds),
+    constantConcurrentUsers(6000) during (10 seconds),
+    constantConcurrentUsers(8000) during (10 seconds),
+    constantConcurrentUsers(10000) during (10 seconds)
+  )
+)
+```
 
-# Procedure
-* Warm twice and hit three times
-* mark the best one if we can
-
-# MVC
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/mvc1.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/mvc2.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/mvc3.png)
-
-# MVC Async
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/async1.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/async2.png)
-best
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/async3.png)
-
-# WebFlux
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/flux1.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/flux2.png)
-best
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/flux3.png)
-
-# WebFlux Coroutine
-best
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/coroutine1.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/coroutine2.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/coroutine3.png)
-
-# Vert.x
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx1.png)
-best
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx2.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx3.png)
-
-# Vert.x Coroutine
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx-coroutine1.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx-coroutine2.png)
-best
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx-coroutine3.png)
+# [Spring Web 1](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/spring_boot_1/index.html)
+# [Spring Web 2](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/spring_boot_2/index.html)
+# [Spring Web 3](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/spring_boot_3/index.html)
+# [Spring Web 4](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/spring_boot_4/index.html)
+# [Spring Web 5](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/spring_boot_5/index.html)
+# [Spring Web 6](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/spring_boot_6/index.html)
+# [Vert.x 1](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/vertx_1/index.html)
+# [Vert.x 2](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/vertx_2/index.html)
+# [Vert.x 3](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/vertx_3/index.html)
+# [Vert.x 4](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/vertx_4/index.html)
+# [Vert.x 5](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/vertx_5/index.html)
+# [Vert.x 6](https://b2etw.github.io/reactive-coroutine-performance-test/disk/case1/vertx_6/index.html)
