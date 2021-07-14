@@ -1,56 +1,72 @@
 # Case 1, Network IO
-* build a delay service which will return {time} ms with /mock/delay/{time} endpoint
+* build a delay service which will return {time} ms with /delay/ms/{time} endpoint
 * the target server will invoke delay endpoint and return
 
-# Environment, ecs.g6.xlarge(4core, 16g)
-* all services deploy on aliyun ecs.g6.xlarge machine
+# Environment
+* AWS t2.xlarge (4core 16g) -> Docker, Spring Web, Spring Web Async
+* AWS t2.xlarge (4core 16g) -> Docker, Spring Reactive Web, Spring Reactive Web Coroutine
+* AWS t2.xlarge (4core 16g) -> Docker, Vert.x Verticle
+* AWS t2.xlarge (4core 16g) -> Docker, Vert.x Coroutine Verticle
+* AWS t2.xlarge (4core 16g) -> Docker, Ktor
+* AWS t2.2xlarge (8core 32g) -> openjdk-11-jdk, Apache-JMeter-5.4.1
 
 # Context
-* target server receive request and invoke /mock/delay/1 endpoint then return
-* jmeter use constant throughput timer to keep 15 RPS
-* for demo-mock
-  * server.tomcat.threads.max=800 
+* target server receive request and invokes these endpoints by following steps
+  * invoke /delay/ms/100, /delay/ms/200 concurrently
+  * wait first two result and invoke /delay/ms/300
+  * wait third result and invoke /delay/ms/400, /delay/ms/500 concurrently
+* jmeter use constant throughput timer to keep **20 RPS**
+* for demo-delay-service
+```
+server.tomcat.threads.max=800
+``` 
 * for demo-spring-mvc
-  * server.tomcat.threads.max=800
+```
+server.tomcat.threads.max=800
+``` 
 * for demo-spring-flux
-  * -Dreactor.netty.ioWorkerCount=1000
-  * -Dreactor.netty.pool.maxConnections=8192
+```shell
+-Dreactor.netty.ioWorkerCount=1000 -Dreactor.netty.pool.maxConnections=8192
+```
+* for demo-vertx
+```kotlin
+vertx.deployVerticle(
+    "com.example.demo.vertx.VertxVerticle",
+    DeploymentOptions().setInstances(VertxOptions.DEFAULT_EVENT_LOOP_POOL_SIZE)
+)
+
+vertx.deployVerticle(
+  "com.example.demo.vertx.ServiceVerticle", 
+  DeploymentOptions()
+    .setInstances(VertxOptions.DEFAULT_EVENT_LOOP_POOL_SIZE)
+    .setWorker(true)
+    .setWorkerPoolSize(1000)
+)
+```
+* for demo-ktor
+```
+ktor {
+    deployment {
+        callGroupSize = 1000
+        connectionGroupSize = 1000
+        workerGroupSize = 1000
+    }
+}
+```
 
 # Procedure
-* Warm twice and hit three times
-* mark the best one if we can
+* Warm twice and hit one once
 
-# MVC
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/mvc1.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/mvc2.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/mvc3.png)
+# [Spring Web](https://b2etw.github.io/reactive-coroutine-performance-test/network/case2/network_spring_mvc_case_2/index.html)
 
-# MVC Async
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/async1.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/async2.png)
-best
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/async3.png)
+# [Spring Web Async](https://b2etw.github.io/reactive-coroutine-performance-test/network/case2/network_spring_flux_case_2/index.html)
 
-# WebFlux
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/flux1.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/flux2.png)
-best
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/flux3.png)
+# [Spring Reactive Web](https://b2etw.github.io/reactive-coroutine-performance-test/network/case2/network_spring_mvc_case_2/index.html)
 
-# WebFlux Coroutine
-best
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/coroutine1.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/coroutine2.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/coroutine3.png)
+# [Spring Reactive Web Coroutine](https://b2etw.github.io/reactive-coroutine-performance-test/network/case2/network_spring_flux_case_2/index.html)
 
-# Vert.x
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx1.png)
-best
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx2.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx3.png)
+# [Vert.x](https://b2etw.github.io/reactive-coroutine-performance-test/network/case2/network_vertx_vertx_case_2/index.html)
 
-# Vert.x Coroutine
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx-coroutine1.png)
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx-coroutine2.png)
-best
-![](https://raw.githubusercontent.com/b2etw/reactive-coroutine-performance-test/main/doc/case1/samples/vertx-coroutine3.png)
+# [Vert.x Coroutine](https://b2etw.github.io/reactive-coroutine-performance-test/network/case2/network_vertx_vertx_case_2/index.html)
+
+# [Ktor](https://b2etw.github.io/reactive-coroutine-performance-test/network/case2/network_ktor_ktor_case_2/index.html)
