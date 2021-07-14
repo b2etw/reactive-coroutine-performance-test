@@ -3,8 +3,8 @@
 * the target server will invoke delay endpoint and return
 
 # Environment
-* AWS t2.xlarge (4core 16g) -> Docker, Spring Web MVC, Spring Web MVC Async
-* AWS t2.xlarge (4core 16g) -> Docker, Spring Web Flux, Spring Web Flux Coroutine
+* AWS t2.xlarge (4core 16g) -> Docker, Spring Web, Spring Web Async
+* AWS t2.xlarge (4core 16g) -> Docker, Spring Reactive Web, Spring Reactive Web Coroutine
 * AWS t2.xlarge (4core 16g) -> Docker, Vert.x Verticle
 * AWS t2.xlarge (4core 16g) -> Docker, Vert.x Coroutine Verticle
 * AWS t2.xlarge (4core 16g) -> Docker, Ktor
@@ -56,14 +56,14 @@ ktor {
 
 # [Spring Web](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_mvc_case_1/index.html)
 
-# [Spring Reactive Web](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_flux_case_1/index.html)
+# [Spring Web Async](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_flux_case_1/index.html)
 
-# [Spring Web](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_mvc_case_1/index.html)
+# [Spring Reactive Web](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_mvc_case_1/index.html)
 
-# [Spring Reactive Web](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_flux_case_1/index.html)
-
-# [Vert.x](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_vertx_vertx_case_1/index.html)
+# [Spring Reactive Web Coroutine](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_spring_flux_case_1/index.html)
 
 # [Vert.x](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_vertx_vertx_case_1/index.html)
+
+# [Vert.x Coroutine](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_vertx_vertx_case_1/index.html)
 
 # [Ktor](https://b2etw.github.io/reactive-coroutine-performance-test/network/case1/network_ktor_ktor_case_1/index.html)
