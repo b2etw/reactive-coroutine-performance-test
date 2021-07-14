@@ -2,8 +2,8 @@
 * process bcrypt hashing with **cost factor 11**
 
 # Environment
-* AWS t2.xlarge (4core 16g) -> Docker, Spring Web MVC
-* AWS t2.xlarge (4core 16g) -> Docker, Spring Web Flux
+* AWS t2.xlarge (4core 16g) -> Docker, Spring Web
+* AWS t2.xlarge (4core 16g) -> Docker, Spring Reactive Web
 * AWS t2.xlarge (4core 16g) -> Docker, Vert.x
 * AWS t2.xlarge (4core 16g) -> Docker, Ktor
 * AWS t2.2xlarge (8core 32g)
