@@ -7,26 +7,26 @@ scrape_configs:
     scrape_interval: 5s
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["192.168.101.92:8888"]
+      - targets: ["192.168.101.197:8888"]
   - job_name: "spring-mvc"
     scrape_interval: 5s
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["192.168.101.239:8080"]
+      - targets: ["192.168.101.178:8080"]
   - job_name: "delay-spring-flux"
     scrape_interval: 5s
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["192.168.101.140:8080"]
+      - targets: ["192.168.101.12:8080"]
   - job_name: "vertx"
     scrape_interval: 5s
     static_configs:
-      - targets: [ "192.168.101.27:8080" ]
+      - targets: [ "192.168.101.193:8080" ]
   - job_name: "vertx-coroutine"
     scrape_interval: 5s
     static_configs:
-      - targets: [ "192.168.101.210:8080" ]
+      - targets: [ "192.168.101.97:8080" ]
   - job_name: "ktor"
     scrape_interval: 5s
     static_configs:
-      - targets: [ "192.168.101.114:8080" ]
+      - targets: [ "192.168.101.126:8080" ]

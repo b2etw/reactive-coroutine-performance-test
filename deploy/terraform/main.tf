@@ -34,6 +34,7 @@ variable "system_prefix" { default = "reactive-coroutine-performance-test" }
 variable "environment" { default = "dev" }
 variable "number_of_master_instances" { default = 8 }
 variable "master_instance_type" { default = "t2.xlarge" }
+variable "jmeter_instance_type" { default = "t2.2xlarge" }
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 data "aws_ami" "ubuntu" {
@@ -139,8 +140,36 @@ module "ec2_cluster_master" {
   }
 }
 
+module "ec2_cluster_jmeter" {
+  source                 = "terraform-aws-modules/ec2-instance/aws"
+  version                = "~> 2.0"
+
+  name                   = "${var.system_prefix}-jmeter"
+  instance_count         = 1
+
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.jmeter_instance_type
+  key_name               = "rancher-key-aws-tokyo"
+  monitoring             = true
+  vpc_security_group_ids = [module.security_group.this_security_group_id]
+  subnet_ids             = module.vpc.public_subnets
+
+  root_block_device      = [{
+    volume_size = 128
+  }]
+
+  tags = {
+    Terraform   = "true"
+    Environment = "${var.environment}"
+  }
+}
+
 output "master_public_ips" {
   value = module.ec2_cluster_master.public_ip
+}
+
+output "jmeter_public_ips" {
+  value = module.ec2_cluster_jmeter.public_ip
 }
 
 output "master_private_ips" {

@@ -35,4 +35,9 @@
       command: docker -v
       register: docker_version_output
 
+    - name: copy files to remote host
+      copy:
+        src: ./docker-compose.yml
+        dest: /home/ubuntu/
+
     - debug: msg="{{ docker_version_output.stdout }}"
